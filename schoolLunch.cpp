@@ -74,6 +74,11 @@ int main()
 
 	loginGetYN();
 
+<<<<<<< HEAD
 	return 0;
+
+=======
+	// I am testing my first commit
+>>>>>>> 
 
 }
