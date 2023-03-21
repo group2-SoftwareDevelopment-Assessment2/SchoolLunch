@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 
 void line()
 {
@@ -9,15 +10,27 @@ void line()
 
 struct login
 {
-	string username;  //a struct that can be used for the login form
-	string email;
-	string password;
+	std::string username;  //a struct that can be used for the login form
+	std::string email;
+	std::string password;
 };
 
-void loginForm ()
+void loginForm(login& userLogin)
 {
-	
-	//this will be the login form for exsisting accounts
+	std::cout << "Great! Let's get you signed in" << std::endl;
+	line();
+
+	std::cout << "Username: ";
+	std::cin >> userLogin.username;
+	std::cout << "email: ";
+	std::cin >> userLogin.email;
+	std::cout << "Password: ";
+	std::cin >> userLogin.password;
+
+	//Display user info and navigate to menu order
+	std::cout << std::endl;
+	std::cout << "Welcome, " << userLogin.username << std::endl;
+
 }
 
 void newAccount() {
@@ -30,21 +43,25 @@ bool loginGetYN() //
 {
 	char answer;
 
-	std::cout << "Welcome" << sdt::endl; 
+	std::cout << "Welcome" << std::endl;
 	std::cout << "Do you already have an account with us? (y/n)" << std::endl;
 	std::cin >> answer; //asking the user if they have an account
 
-	if (answer == "y" || answer == "Y")
+	if (answer == 'y' || answer == 'Y')
 	{
-		loginForm();
+		login userLogin;
+		loginForm(userLogin);
+		return true;
 	}
-	else if (answer == "n" || answer == "N")
+	else if (answer == 'n' || answer == 'N')
 	{
 		newAccount();
+		return false;
 	}
 	else
 	{
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
+		return false;
 	}
 }
 
@@ -52,10 +69,10 @@ int main()
 {
 
 	line();
-	std::cout << "School Lunch" << std::end; //Just a heading for that this app will be
+	std::cout << "School Lunch" << std::endl; //Just a heading for that this app will be
 	line();
 
 	loginGetYN();
 
-	// I am testing my first commit
+	return 0;
 }
