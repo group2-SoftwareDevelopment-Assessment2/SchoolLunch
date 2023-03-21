@@ -15,9 +15,9 @@ struct login
 	std::string password;
 };
 
-void loginForm (login& userLogin)
+void loginForm(login& userLogin)
 {
-    std::cout << "Great! Let's get you signed in" << std::endl;
+	std::cout << "Great! Let's get you signed in" << std::endl;
 	line();
 
 	std::cout << "Username: ";
@@ -30,7 +30,7 @@ void loginForm (login& userLogin)
 	//Display user info and navigate to menu order
 	std::cout << std::endl;
 	std::cout << "Welcome, " << userLogin.username << std::endl;
-	
+
 }
 
 void newAccount() {
@@ -43,7 +43,7 @@ bool loginGetYN() //
 {
 	char answer;
 
-	std::cout << "Welcome" << std::endl; 
+	std::cout << "Welcome" << std::endl;
 	std::cout << "Do you already have an account with us? (y/n)" << std::endl;
 	std::cin >> answer; //asking the user if they have an account
 
@@ -74,6 +74,6 @@ int main()
 
 	loginGetYN();
 
-return 0;
+	return 0;
 
 }
