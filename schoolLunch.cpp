@@ -157,4 +157,71 @@ int main()
 
 	return 0;
 
+ 	
 }
+
+struct MenuItem {         // used to hold menu information
+
+	string name;
+	double price;
+
+};
+
+void printMenu(const vector <MenuItem>& menu)   // to print the actual menu 
+{
+	cout << "Menu:" << endl;
+	for (const auto% item : menu)
+	{
+		cout << item.name << " -$" << item.price << endl;
+
+	}
+}
+
+void addToCart(vector<MenuItem>& cart, connst MenuItem& item)   // here you can add items to the cart from the menu
+{
+	cart.push_back(item);     // this is to add the item to the end of the cart
+	cout << item.name << "The item has been added to your cart." << endl;
+}
+
+void printCart(const vector<MenuItem>& cart)
+{
+	// below is to print the contents of the cart
+	double total = 0;
+	cout << "cart:" << endl;
+	for (const auto& item : cart)
+	{
+		cout << item.name << " -$" << item.price << endl;
+		total += item.price  // allowing the product/item price to be added to the total
+	}
+	cout << "Total price : $" << total << endl;
+}
+
+int main()
+{
+	vector<MenuItem> menu = {               // creating a vector for all the products/items
+		{"Vegan mac n cheese", 6.00},
+		{"Chicken and mayo wrap", 7.50},
+		{"Mince and cheese toasty", 5.50},
+		{"Sushi roll", 7.00},
+		{"Fruit Cup", 4.50},
+		{"Muffin", 5.00},
+		{"Bag of veggie chips", 3.00},
+		{"Vegetarian paella", 8.00},
+		{"Chicken Salad and roll", 6.00},
+		{"Crackers and cheese with apple", 3.00},
+	};
+}
+
+line();     // to print a line to separate some space
+    cout << "School Lunch" << endl;
+
+line();      // to print a line to separate some space
+
+	bool hasAccount = loginGetYN(); // here we declare a boolean variable and call a function to see if the user has an account or not
+
+	if (hasAccount) {
+		// this is to check if user has existing account
+	}
+	else {
+		 // if not then an account need to be created
+	}
