@@ -10,7 +10,7 @@ void line()//MJ
 	//feel free to change pattern
 } 
 
-bool hasAccount = loginGetYN(); // Richard // here we declare a boolean variable and call a function to see if the user has an account or not
+bool hasAccount = loginGetY/N(); // Richard // here we declare a boolean variable and call a function to see if the user has an account or not
 
 if (hasAccount) //Richard 
 {
@@ -19,6 +19,50 @@ if (hasAccount) //Richard
 else {
 	// if not then an account need to be created
 }
+
+vector<MenuItem> cart;
+
+	bool odering = true;
+	while (ordering)
+	{
+		printMenu(menu);    //Richard // prompting the user to enter the number of items they want to order
+		cout << "Enter the number of items you would like to order, or enter 0 to check out:" endl;
+		int choice;
+		cin >> choice;
+
+		//Richard// to check if the user entered a valid choice
+		if (choice > 0 && choice <= menu.size())
+		{
+			addToCart(cart, menu[choice - 1]); //Richard // checking if choice is valid, and adding the item to the cart
+			
+		}
+		else if (choice == 0)   //Richard// if the user wants to check out, the ordering will set to false, and will close the loop
+		{
+			ordering = false;
+		}
+		else
+		{
+			                  //Richard// if the choice is invalid, it will ask them to try again 
+			cout << "Invalid choise, please enter a number between 1 and " << menu.size() << endl;
+
+		}
+	}
+
+	printCart(cart);      //Richard// calling the function to print the items in the cart, user has choice to confirm
+	cout << "Confirm your order? (y/n)" << endl;
+	char confirm;
+	cin << confirm;
+
+	if (confirm == 'y' || confirm == 'Y')
+
+	{                             //Richard// if the user confirms, the below will tell them its confirmed and will end the program
+		cout << "Order confirmed, thanks so much for your purchase!" << endl;
+	}
+	else
+
+	{                             //Richard// if the order is canceled, the program will confirm that choice and end the program
+		cout << "Order canceled." << endl;
+	}
 
 struct MenuItem //Richard
 {         // used to hold menu information
@@ -67,7 +111,8 @@ void printCart(const std::vector<MenuItem>& cart) //Richard
 	std::cout << "Total price : $" << total << std::endl;
 }
 
-void addToCart(vector<MenuItem>& cart, connst MenuItem& item) //Richard  // here you can add items to the cart from the menu
+
+void addToCart(vector<MenuItem>& cart, const MenuItem& item) //Richard  // here you can add items to the cart from the menu
 {
 	cart.push_back(item);     // this is to add the item to the end of the cart
 	cout << item.name << "The item has been added to your cart." << endl;
