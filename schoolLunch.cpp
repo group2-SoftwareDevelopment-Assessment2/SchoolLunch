@@ -10,13 +10,14 @@ struct MenuItem {
 void line() {
     std::cout << "................................................................................................................." << std::endl;
 }
+// a Pattern that can be used to make things look neat and make the app more readable
 
-bool loginGetYN() {
+bool loginGetYN() { // Richard
     // Function to ask user if they have an account
     // and return true if they do and false if they don't
 }
 
-bool checkAccount() {
+bool checkAccount() {  // Richard
     bool hasAccount = loginGetYN();
     if (hasAccount) {
         // Code to check if user has existing account
@@ -26,45 +27,45 @@ bool checkAccount() {
 }
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
-    cart.push_back(item);
+    cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
     std::cout << item.name << " added to cart." << std::endl;
 }
 
-std::vector<MenuItem> cart;
+std::vector<MenuItem> cart;             // Richard // to create and empty cart vector
 
 bool ordering = true;
-while (ordering) {
-    printMenu(menu);
+while (ordering) {                      // Richard //  loop while the user is still ordering
+    printMenu(menu);                  
     std::cout << "Enter the number of items you would like to order, or enter 0 to check out:" << std::endl;
     int choice;
     std::cin >> choice;
-    if (choice > 0 && choice <= menu.size()) {
-        addToCart(cart, menu[choice - 1]);
-    } else if (choice == 0) {
-        ordering = false;
-    } else {
+    if (choice > 0 && choice <= menu.size()) {     //Richard // If the user entered a valid menu item number
+        addToCart(cart, menu[choice - 1]);         // Richard // to add the selected product to the cart
+    } else if (choice == 0) {                    
+        ordering = false;                          // Richard // to set the ordering to false to exit the loop
+    } else {                                        // Richard // // If the user entered an invalid input
         std::cout << "Invalid choice, please enter a number between 1 and " << menu.size() << std::endl;
     }
 }
 
 void printCart(const std::vector<MenuItem>& cart) {
-    double total = 0;
-    std::cout << "cart:" << std::endl;
+    double total = 0;                               // Richard // this is to initialize the total price to 0
+    std::cout << "cart:" << std::endl;              // Richard // used to display the cart header
     for (const auto& item : cart) {
         std::cout << item.name << " -$" << item.price << std::endl;
         total += item.price;
     }
-    std::cout << "Total price : $" << total << std::endl;
+    std::cout << "Total price : $" << total << std::endl;   // Richard // to display the total price
 }
 
 void printMenu(const std::vector<MenuItem>& menu) {
-    std::cout << "Menu:" << std::endl;
+    std::cout << "Menu:" << std::endl;                 // Richard // Displaying the menu header
     for (const auto& item : menu) {
-        std::cout << item.name << " -$" << item.price << std::endl;
+        std::cout << item.name << " -$" << item.price << std::endl;  // Richard // Display the item name and price
     }
 }
 
-void menuItems() {
+void menuItems() {                       //  Richard // List of Menu items for the user to choose from
     std::vector<MenuItem> menu = {
         {"Vegan mac n cheese", 6.00},
         {"Chicken and mayo wrap", 7.50},
