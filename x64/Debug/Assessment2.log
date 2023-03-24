@@ -1,0 +1,49 @@
+﻿  HappyMealz.cpp
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(43,1): error C2059: syntax error: 'while'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(43,18): error C2143: syntax error: missing ';' before '{'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(43,18): error C2447: '{': missing function header (old-style formal list?)
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(91,6): error C2084: function 'void printCart(const std::vector<MenuItem,std::allocator<MenuItem>> &)' already has a body
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(59,6): message : see previous definition of 'printCart'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(104,6): error C2182: 'addToCart': this use of 'void' is not valid
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(104,6): error C2365: 'addToCart': redefinition; previous definition was 'function'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(34,6): message : see declaration of 'addToCart'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(104,16): error C2065: 'vector': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(104,23): error C2275: 'MenuItem': expected an expression instead of a type
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(104,39): error C2059: syntax error: 'const'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(105,1): error C2143: syntax error: missing ';' before '{'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(105,1): error C2447: '{': missing function header (old-style formal list?)
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(123,2): error C2065: 'string': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(123,9): error C2146: syntax error: missing ';' before identifier 'name'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(123,9): error C2065: 'name': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(123,15): error C2065: 'mail': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(123,21): error C2065: 'pass': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(154,3): error C2065: 'ifstream': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(154,12): error C2146: syntax error: missing ';' before identifier 'input'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(154,12): error C3861: 'input': identifier not found
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(156,10): error C2065: 'input': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(156,19): error C2065: 'name': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(156,27): error C2065: 'mail': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(156,35): error C2065: 'pass': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(158,8): error C2065: 'name': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(158,38): error C2065: 'mail': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(158,65): error C2065: 'pass': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(164,3): error C2065: 'input': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(168,4): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(169,4): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(170,4): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(222,6): error C2084: function 'bool loginGetYN(void)' already has a body
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(19,6): message : see previous definition of 'loginGetYN'
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(256,2): error C2065: 'loginGetYN': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(272,2): error C2065: 'cout': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(274,15): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(275,2): error C2065: 'cout': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(276,2): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(277,2): error C2065: 'cout': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(278,2): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(279,2): error C2065: 'cout': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(280,2): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(281,2): error C2065: 'cout': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(283,15): error C2065: 'cin': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(285,40): error C2653: 'ios': is not a class or namespace name
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(285,45): error C2065: 'app': undeclared identifier
+C:\Users\sauer\Desktop\Yoobee\Software Development year 1\Module 3\Ass 2\Group2\Diploma in Software Development(Year 1)\Assessment2\HappyMealz.cpp(286,133): error C2065: 'endl': undeclared identifier
