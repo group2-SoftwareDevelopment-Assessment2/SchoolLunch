@@ -21,21 +21,14 @@ bool loginGetYN() { // Richard
 	// and return true if they do and false if they don't
 }
 
-bool checkAccount() {
-    bool hasAccount = loginGetYN();
-    if (hasAccount) {
-        // Code to check if user has existing account
-        if (userHasExistingAccount()) {
-            return true;
-        } else {
-            std::cout << "Sorry, you don't have an existing account." << std::endl;
-            return false;
-        }
-    } else {
-        // Code to create a new account
-        createNewAccount();
-        return true;
-    }
+bool checkAccount() {  // Richard
+	bool hasAccount = loginGetYN();
+	if (hasAccount) {
+		// Code to check if user has existing account
+	}
+	else {
+		// Code to create a new account
+	}
 }
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
