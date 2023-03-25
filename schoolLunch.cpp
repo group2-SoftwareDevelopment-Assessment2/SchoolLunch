@@ -31,9 +31,10 @@ void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
     std::cout << item.name << " added to cart." << std::endl;
 }
 
-std::vector<MenuItem> cart;             // Richard // to create and empty cart vector
 
+std::vector<MenuItem> cart;             // Richard // to create and empty cart vector
 bool ordering = true;
+
 while (ordering) {                      // Richard //  loop while the user is still ordering
     printMenu(menu);                  
     std::cout << "Enter the number of items you would like to order, or enter 0 to check out:" << std::endl;
