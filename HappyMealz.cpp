@@ -13,11 +13,13 @@ void Line() //MJ
 	std::cout << "................................................................................................................." << std::endl;
 }
 
-struct MenuItem {
+struct MenuItem //Richard
+{
 	std::string name;
 	double price;
 };
 
+bool loginGetYN(); //MJ
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
 	cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
@@ -177,12 +179,13 @@ void loginForm(login& userLogin) //MJ
 
 				int chooseFollow;
 
-				do
+                               do
 				{
 					std::cout << "You can continue by choosing the following : " << std::endl;
 					std::cout << "1. Retry." << std::endl;
 					std::cout << "2. Create an account." << std::endl;
-					std::cout << "3. Exit." << std::endl;
+					std::cout << "3. Need help to recover account." << std::endl;
+					std::cout << "4. Exit." << std::endl;
 					std::cout << "Please enter your choice number : ";
 					std::cin >> chooseFollow;
 
@@ -192,15 +195,16 @@ void loginForm(login& userLogin) //MJ
 						loginForm(userLogin);
 						break;
 					case 2:
-						//new acc comment
+						newAccount(userLogin);
 						break;
 					case 3:
+						//acc recover code
+						break;
+					case 4:
 						return;
-
 					default:
 						std::cout << "Invalid choice. Please only choose the numbers 1 or 2 or 3" << std::endl;
 						break;
-
 					}
 				} while (chooseFollow != 3);
 			}
@@ -213,7 +217,7 @@ int main()
 {
 
 	Line();
-	std::cout << "The Happy Mealz" << std::endl; //Just a heading for that this app will be
+	std::cout << "The HappyMealz" << std::endl; //Just a heading for that this app will be
 	Line();
 
 	loginGetYN();
@@ -227,8 +231,8 @@ void newAccount(login& userLogin)   //MJ
 	newUser.username;
 	newUser.email;
 	newUser.password;
-	//newUser.allergy;
-	//newUser.diet;
+	newUser.allergy;
+	newUser.diet;
 
 	std::cout << "Let's create a new Account" << std::endl;
 	Line();
@@ -239,21 +243,114 @@ void newAccount(login& userLogin)   //MJ
 	std::cin >> newUser.email;
 	std::cout << "Choose your password :";
 	std::cin >> newUser.password;
-	//std::cout << "Do you have any allergies :";
-	//std::cin >> newUser.allergy;
-	//std::cout << "Is there any special diets that we need to consider (lactose intolerance,etc.) : ";
-	//std::cin.ignore();
-	//std::getline(std::cin, newUser.diet);
+	std::cout << "Do you have any allergies :";
+	std::cin >> newUser.allergy;
+	std::cout << "Is there any special diets that we need to consider (lactose intolerance,etc.) : ";
+	std::cin.ignore();
+	std::getline(std::cin, newUser.diet);
 
 	std::ofstream regUser("database.txt", std::ios::app);
-	regUser << newUser.username << ' ' << newUser.email << ' ' << newUser.password << ' ' << std::endl;
-	//newUser.allergy << ' ' << newUser.diet <<
+	regUser << newUser.username << newUser.email << newUser.password <<  newUser.allergy <<  newUser.diet << std::endl;
+	
 	Line();
 	std::cout << "REGISTERATION WAS SUCCESSFULL\n";
 	Line();
 
 	loginForm(userLogin);
 }
+
+void accountRecover(login& userLogin)  //MJ
+{
+	int ch; //variable for user choice called ch
+	Line();
+	std::cout << "Forgotter Your Account Details?\n We're Here To Help\nSelect an option:\n";
+	std::cout << "1. Search for your acoount via email";
+	std::cout << "\n2. Go back to Main Menu";
+	std::cout << "\n3. Exit" << std::endl;
+	cout << "Enter your choice :";
+	cin >> ch;
+	switch(ch)
+	{
+		case 1:
+		{
+			int count = 0;
+			std::string searchUser,emale,passw,allerG,deit, get;
+			std::cout << "\nWhat is your email adress?\nEmail :";
+			std::cin >> emale;
+
+			ifstream searchU("database.txt");
+			while (std::getline(searchU, get))
+			{
+				std::stringstream ss(get);
+				ss >> searchUser >> emale >> passw >> allerG >> deit;
+				if (emale == userLogin.email)
+				{
+					count = 1;
+				}
+				searchU.close();
+				if (count == 1)
+					std::cout << "\nHarray, account found\n";
+				std::cout << "\nYour account details is :" << "\n" << userLogin.username << "\n" << userLogin.email << "\n" << userLogin.allergy << "\n" << userLogin.diet;
+				std::cout << std::endl;
+				char confirm;
+				std::cout << "Is this you?\n";
+				std::cout << "y/n : ";
+				std::cin >> confirm;
+				if (confirm == 'y' || confirm == 'Y')
+				{
+					std::cout << "This is your password :" << userLogin.password;
+					loginForm(userLogin);
+				}
+				else if (confirm == 'n' || confirm == 'N')
+				{
+					char confirmA;
+					std::cout << "Would you like to create an accout? (y/n) : ";
+					std::cin >> confirmA;
+					if (confirmA == 'y' || confirmA == 'Y')
+					{
+						newAccount(userLogin);
+					}
+					else if (confirmA == 'n' || confirmA == 'N')
+					{
+						std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+						std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+						std::cout << "Press ENTER to contintue to restart the account recovery process...";
+						cin.get();
+						accountRecover(userLogin);
+					}
+					else
+					{
+						std::cout << "Please only enter 'y' or 'n' " << std::endl;
+						return;
+					}
+					 
+				}
+				else
+				{
+					std::cout << "Please only enter 'y' or 'n' " << std::endl;
+					return;
+				}break;
+				
+			}
+		}
+		case 2:
+			main(); //or any other pathway
+		{
+			break;
+		}
+		case 3:
+		{
+			return;
+		}
+		default:
+		{
+			std::cout << "Please only choose number '1' or '2' or '3'";
+			accountRecover(userLogin);
+		}
+	}
+
+}
+
 
 bool loginGetYN() //MJ
 {
