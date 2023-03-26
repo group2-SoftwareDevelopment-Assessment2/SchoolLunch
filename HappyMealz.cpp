@@ -269,7 +269,7 @@ void newAccount(login& userLogin)   //MJ
 	loginForm(userLogin);
 }
 
-void accountRecover(login& userLogin)
+void accountRecover(login& userLogin)  //MJ
 {
 	int ch; //variable for user choice called ch
 	Line();
