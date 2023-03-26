@@ -18,17 +18,6 @@ struct MenuItem {
 	double price;
 };
 
-bool loginGetYN(); //MJ
-
-//bool checkAccount() {  // Richard
-//	bool hasAccount = loginGetYN();
-//	if (hasAccount) {
-		// Code to check if user has existing account
-//	}
-//	else {
-		// Code to create a new account
-//	}
-//}
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
 	cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
