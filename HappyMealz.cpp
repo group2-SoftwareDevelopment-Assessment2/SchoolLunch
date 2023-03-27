@@ -165,7 +165,7 @@ void loginForm(login& userLogin) //MJ
 		{
 
 
-			if (attempt < 3)
+			if (attempt < 2)
 			{
 				attempt++;
 				std::cout << std::endl;
@@ -192,6 +192,7 @@ void loginForm(login& userLogin) //MJ
 					switch (chooseFollow)
 					{
 					case 1:
+						attempt = 0;
 						loginForm(userLogin);
 						break;
 					case 2:
@@ -375,6 +376,7 @@ bool loginGetYN() //MJ
 	else
 	{
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
+		loginGetYN();
 		return false;
 	}
 }
