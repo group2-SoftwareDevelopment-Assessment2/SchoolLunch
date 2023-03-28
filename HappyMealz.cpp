@@ -98,11 +98,12 @@ struct login //MJ
 
 void newAccount(login& userLogin);   //MJ
 
+void accountRecover(); //MJ
+
 void loginForm(login& userLogin) //MJ 
 {
 	std::string name, mail, pass;
 	fstream database;
-
 
 	std::cout << "Great! Let's get you logged in" << std::endl;
 	Line();
@@ -163,8 +164,6 @@ void loginForm(login& userLogin) //MJ
 		}
 		else
 		{
-
-
 			if (attempt < 2)
 			{
 				attempt++;
@@ -176,36 +175,53 @@ void loginForm(login& userLogin) //MJ
 			{
 				std::cout << std::endl;
 				std::cout << "Maximum number of login attepmts has been reached." << std::endl;
+				std::cout << std::endl;
+				Line();
 
 				int chooseFollow;
 
-                               do
+				do
 				{
 					std::cout << "You can continue by choosing the following : " << std::endl;
+					std::cout << std::endl;
 					std::cout << "1. Retry." << std::endl;
 					std::cout << "2. Create an account." << std::endl;
 					std::cout << "3. Need help to recover account." << std::endl;
 					std::cout << "4. Exit." << std::endl;
 					std::cout << "Please enter your choice number : ";
 					std::cin >> chooseFollow;
+					std::cout << std::endl;
 
 					switch (chooseFollow)
 					{
 					case 1:
+					{
 						attempt = 0;
 						loginForm(userLogin);
 						break;
+					}
 					case 2:
+					{
 						newAccount(userLogin);
 						break;
+					}
 					case 3:
-						//acc recover code
+					{
+						accountRecover();
 						break;
+					}
 					case 4:
-						return;
+					{
+						//exit out o the program
+						std::cout << "Thank you for using our program. Goodbye!" << std::endl;
+						exit(0);
+						break;
+					}
 					default:
+					{
 						std::cout << "Invalid choice. Please only choose the numbers 1 or 2 or 3" << std::endl;
 						break;
+					}
 					}
 				} while (chooseFollow != 3);
 			}
@@ -213,6 +229,140 @@ void loginForm(login& userLogin) //MJ
 		input.close();
 	} while (attempt != 3);
 }
+
+void accountRecover()
+{
+	login userLogin; //to help define the parameters of other used funtions
+
+	int choice;
+	std::string userN, mail, passw, allerG, strictdiet, mailInput;
+	bool accountFound = false;
+	std::string line;
+
+		Line();
+		std::cout << "Account Recovery\n";
+		Line();
+
+		std::cout << "1. Search for account by email\n";
+		std::cout << "2. Go back to main menu\n";
+		std::cout << "3. Exit\n";
+		std::cout << "Enter your choice: ";
+		std::cin >> choice;
+
+		switch (choice)
+		{
+		case 1:
+		{
+            ifstream database("database.txt");
+			while (true)
+			{
+				std::cout << "\nWhat is your email adress?\nEmail :";
+				std::cin >> mailInput;
+
+				if (mailInput.find('@') != std::string::npos)
+				{
+					break;
+				}
+				else
+				{
+					std::cout << "Invalid email address. Please include '@' symbol." << std::endl;
+				}
+			}
+
+			
+			while (database >> userN >> mail >> passw >> allerG >> strictdiet) 
+			{
+				if (mailInput == mail)
+				{
+					accountFound = true;
+
+					database.close();
+					std::cout << std::endl;
+					std::cout << "\nAccount that matched your descrpition:\n\n";
+					std::cout << "Username :" << " " << userN;
+					std::cout << "Email :" << " " << mail;
+					std::cout << "Allergies :" << " " << allerG;
+					std::cout << "Diet requirements :" << " " << strictdiet;
+
+					std::cout << std::endl;
+					char confirm;
+					std::cout << "Is this you?\n";
+					std::cout << "y/n : ";
+					std::cin >> confirm;
+
+					if (confirm == 'y' || confirm == 'Y')
+					{
+						std::cout << "This is your password :" << passw;
+						std::cout << std::endl;
+						std::wcout << "Press ENTER to continue...";
+						loginForm(userLogin);
+					}
+					else if (confirm == 'n' || confirm == 'N')
+					{
+						char confirmA;
+						std::cout << "Would you like to create an accout? (y/n) : ";
+						std::cin >> confirmA;
+						if (confirmA == 'y' || confirmA == 'Y')
+						{
+							newAccount(userLogin);
+						}
+						else if (confirmA == 'n' || confirmA == 'N')
+						{
+							Line();
+							std::cout << std::endl;
+							std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+							std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+							std::cout << std::endl;
+							std::cout << std::endl;
+							Line();
+							accountRecover();
+						}
+						else
+						{
+							std::cout << "Please only enter 'y' or 'n' " << std::endl;
+							return; //should return to question on wheather user wants to create account
+						}
+					}
+					else
+					{
+						std::cout << "Please only enter 'y' or 'n' " << std::endl;
+						return;
+					}
+					break;
+				}
+				else
+				{
+					accountFound = false;
+                        std::cout << std::endl;
+						std::cout << "No account found with that email address.\n";
+						std::cout << std::endl;
+						std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+						std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+						accountRecover();
+				}
+				}
+			break;
+			}
+		case 2:
+		{
+			//back to start
+			loginGetYN();
+			break;
+		}
+		case 3:
+		{
+			//exit out of the program
+			std::cout << "Thank you for using our program. Goodbye!" << std::endl;
+			exit(0);
+			return;
+		}
+		default:
+		{
+			std::cout << "Please only choose number '1' or '2' or '3'";
+			accountRecover();
+		}
+		}
+	}
 
 int main()
 {
@@ -241,117 +391,25 @@ void newAccount(login& userLogin)   //MJ
 	std::cin.ignore();
 	std::getline(std::cin, newUser.username);
 	std::cout << "Add your email address :";
-	std::cin >> newUser.email;
+	std::getline(std::cin, newUser.email);
 	std::cout << "Choose your password :";
-	std::cin >> newUser.password;
+	std::getline(std::cin, newUser.password);
 	std::cout << "Do you have any allergies :";
-	std::cin >> newUser.allergy;
+	std::getline(std::cin, newUser.allergy);
 	std::cout << "Is there any special diets that we need to consider (lactose intolerance,etc.) : ";
-	std::cin.ignore();
 	std::getline(std::cin, newUser.diet);
 
 	std::ofstream regUser("database.txt", std::ios::app);
-	regUser << newUser.username << newUser.email << newUser.password <<  newUser.allergy <<  newUser.diet << std::endl;
-	
+	regUser << newUser.username << newUser.email << newUser.password << newUser.allergy << newUser.diet << std::endl;
+
 	Line();
 	std::cout << "REGISTERATION WAS SUCCESSFULL\n";
 	Line();
-
-	loginForm(userLogin);
+	std::cout << "THAN YOU\n";
+	std::cout << "PLEASE PRESS ENTER TWICE TO EXIT AND RESTART THE PROGRAM\n";
+	std::cin.get();
+	std::exit(0);
 }
-
-void accountRecover(login& userLogin)  //MJ
-{
-	int ch; //variable for user choice called ch
-	Line();
-	std::cout << "Forgotter Your Account Details?\n We're Here To Help\nSelect an option:\n";
-	std::cout << "1. Search for your acoount via email";
-	std::cout << "\n2. Go back to Main Menu";
-	std::cout << "\n3. Exit" << std::endl;
-	cout << "Enter your choice :";
-	cin >> ch;
-	switch(ch)
-	{
-		case 1:
-		{
-			int count = 0;
-			std::string searchUser,emale,passw,allerG,deit, get;
-			std::cout << "\nWhat is your email adress?\nEmail :";
-			std::cin >> emale;
-
-			ifstream searchU("database.txt");
-			while (std::getline(searchU, get))
-			{
-				std::stringstream ss(get);
-				ss >> searchUser >> emale >> passw >> allerG >> deit;
-				if (emale == userLogin.email)
-				{
-					count = 1;
-				}
-				searchU.close();
-				if (count == 1)
-					std::cout << "\nHarray, account found\n";
-				std::cout << "\nYour account details is :" << "\n" << userLogin.username << "\n" << userLogin.email << "\n" << userLogin.allergy << "\n" << userLogin.diet;
-				std::cout << std::endl;
-				char confirm;
-				std::cout << "Is this you?\n";
-				std::cout << "y/n : ";
-				std::cin >> confirm;
-				if (confirm == 'y' || confirm == 'Y')
-				{
-					std::cout << "This is your password :" << userLogin.password;
-					loginForm(userLogin);
-				}
-				else if (confirm == 'n' || confirm == 'N')
-				{
-					char confirmA;
-					std::cout << "Would you like to create an accout? (y/n) : ";
-					std::cin >> confirmA;
-					if (confirmA == 'y' || confirmA == 'Y')
-					{
-						newAccount(userLogin);
-					}
-					else if (confirmA == 'n' || confirmA == 'N')
-					{
-						std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
-						std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
-						std::cout << "Press ENTER to contintue to restart the account recovery process...";
-						cin.get();
-						accountRecover(userLogin);
-					}
-					else
-					{
-						std::cout << "Please only enter 'y' or 'n' " << std::endl;
-						return;
-					}
-					 
-				}
-				else
-				{
-					std::cout << "Please only enter 'y' or 'n' " << std::endl;
-					return;
-				}break;
-				
-			}
-		}
-		case 2:
-			main(); //or any other pathway
-		{
-			break;
-		}
-		case 3:
-		{
-			return;
-		}
-		default:
-		{
-			std::cout << "Please only choose number '1' or '2' or '3'";
-			accountRecover(userLogin);
-		}
-	}
-
-}
-
 
 bool loginGetYN() //MJ
 {
