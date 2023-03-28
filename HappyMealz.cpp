@@ -103,6 +103,7 @@ void accountRecover(); //MJ
 void loginForm(login& userLogin) //MJ 
 {
 	std::string name, mail, pass;
+	bool userFound = false;
 	fstream database;
 
 	std::cout << "Great! Let's get you logged in" << std::endl;
@@ -141,93 +142,55 @@ void loginForm(login& userLogin) //MJ
 
 		while (std::getline(input, line))
 		{
-
-			std::stringstream ss(line);
-			ss >> name >> mail >> pass;
-
-			if (name == userLogin.username && mail == userLogin.email && pass == userLogin.password)
+			if (line == userLogin.username)
 			{
-				exist = 1;
-				break;
-			}
-
-		}
-		if (exist == 1)
-		{
-			std::cout << std::endl;
-			Line();
-			std::cout << "Hello" << " " << userLogin.username << std::endl;
-			std::cout << std::endl;
-			std::cout << "This will be the Menu for today" << std::endl;
-			Line();
-			Ordering(menuItems());
-		}
-		else
-		{
-			if (attempt < 2)
-			{
-				attempt++;
-				std::cout << std::endl;
-				std::cout << "Login failed. Please try again." << std::endl;
-				std::cout << "............................................................" << std::endl;
-			}
-			else
-			{
-				std::cout << std::endl;
-				std::cout << "Maximum number of login attepmts has been reached." << std::endl;
-				std::cout << std::endl;
-				Line();
-
-				int chooseFollow;
-
-				do
+				getline(input, line); // read email
+				if (line == userLogin.email)
 				{
-					std::cout << "You can continue by choosing the following : " << std::endl;
-					std::cout << std::endl;
-					std::cout << "1. Retry." << std::endl;
-					std::cout << "2. Create an account." << std::endl;
-					std::cout << "3. Need help to recover account." << std::endl;
-					std::cout << "4. Exit." << std::endl;
-					std::cout << "Please enter your choice number : ";
-					std::cin >> chooseFollow;
-					std::cout << std::endl;
+					getline(input, line); // read password
+					if (line == userLogin.password)
+					{
+						userFound = true;
+						getline(input, line); // read allergies
+						cout << "Your allergies: " << line << endl;
+						getline(input, line); // read special diets
+						cout << "Your special diets: " << line << endl;
 
-					switch (chooseFollow)
-					{
-					case 1:
-					{
-						attempt = 0;
-						loginForm(userLogin);
+						std::cout << std::endl;
+						Line();
+						std::cout << "Hello" << " " << userLogin.username << std::endl;
+						std::cout << std::endl;
+						std::cout << "This will be the Menu for today" << std::endl;
+						Line();
+						Ordering(menuItems());
+
 						break;
 					}
-					case 2:
-					{
-						newAccount(userLogin);
-						break;
-					}
-					case 3:
-					{
-						accountRecover();
-						break;
-					}
-					case 4:
-					{
-						//exit out o the program
-						std::cout << "Thank you for using our program. Goodbye!" << std::endl;
-						exit(0);
-						break;
-					}
-					default:
-					{
-						std::cout << "Invalid choice. Please only choose the numbers 1 or 2 or 3" << std::endl;
-						break;
-					}
-					}
-				} while (chooseFollow != 3);
+				}
 			}
+			// skip the rest of the user information
+			getline(input, line); // read email
+			getline(input, line); // read password
+			getline(input, line); // read allergies
+			getline(input, line); // read special diets
 		}
 		input.close();
-	} while (attempt != 3);
+		if (!userFound)
+		{
+			attempt++;
+			std::cout << std::endl;
+			std::cout << "Login failed. Please try again." << std::endl;
+			std::cout << "............................................................" << std::endl;
+		}
+	} while (!userFound && attempt++ < 3);
+
+	if (attempt == 3)
+	{
+		std::cout << std::endl;
+		std::cout << "You have exceeded the maximum number of attempts." << std::endl;
+		std::cout << "Please try again later." << std::endl;
+		std::cout << "............................................................" << std::endl;
+	}
 }
 
 void accountRecover()
@@ -391,7 +354,22 @@ void newAccount(login& userLogin)   //MJ
 	std::cin.ignore();
 	std::getline(std::cin, newUser.username);
 	std::cout << "Add your email address :";
+
+	while (true) //adding a condition that forces user to use the @ symbol in email input field
+	{
+
 	std::getline(std::cin, newUser.email);
+
+		if (newUser.email.find('@') != std::string::npos)
+		{
+			break;
+		}
+		else
+		{
+			std::cout << "Invalid email address. Please include '@' symbol." << std::endl;
+		}
+	}
+
 	std::cout << "Choose your password :";
 	std::getline(std::cin, newUser.password);
 	std::cout << "Do you have any allergies :";
@@ -400,12 +378,17 @@ void newAccount(login& userLogin)   //MJ
 	std::getline(std::cin, newUser.diet);
 
 	std::ofstream regUser("database.txt", std::ios::app);
-	regUser << newUser.username << newUser.email << newUser.password << newUser.allergy << newUser.diet << std::endl;
+	regUser << newUser.username << "\n";
+	regUser << newUser.email << "\n";
+	regUser << newUser.password << "\n";
+	regUser << newUser.allergy << "\n";
+	regUser << newUser.diet << "\n";
+	regUser.close();
 
 	Line();
 	std::cout << "REGISTERATION WAS SUCCESSFULL\n";
 	Line();
-	std::cout << "THAN YOU\n";
+	std::cout << "THANK YOU\n";
 	std::cout << "PLEASE PRESS ENTER TWICE TO EXIT AND RESTART THE PROGRAM\n";
 	std::cin.get();
 	std::exit(0);
