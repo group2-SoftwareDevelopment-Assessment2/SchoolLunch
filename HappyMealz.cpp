@@ -178,19 +178,72 @@ void loginForm(login& userLogin) //MJ
 		if (!userFound)
 		{
 			attempt++;
-			std::cout << std::endl;
-			std::cout << "Login failed. Please try again." << std::endl;
-			std::cout << "............................................................" << std::endl;
-		}
-	} while (!userFound && attempt++ < 3);
+			if (attempt < 4)
+			{
+				std::cout << std::endl;
+				std::cout << "Login failed. Please try again." << std::endl;
+				std::cout << "............................................................" << std::endl;
+			}
+			else
+			{
+				std::cout << std::endl;
+				std::cout << "You have exceeded the maximum number of attempts." << std::endl;
+				std::cout << "Please try again later." << std::endl;
+				std::cout << "............................................................" << std::endl;
 
-	if (attempt == 3)
-	{
-		std::cout << std::endl;
-		std::cout << "You have exceeded the maximum number of attempts." << std::endl;
-		std::cout << "Please try again later." << std::endl;
-		std::cout << "............................................................" << std::endl;
-	}
+				//menu displays if attempts are exceeded
+
+				int chooseFollow;
+
+				do
+				{
+					std::cout << "You can continue by choosing the following : " << std::endl;
+					std::cout << std::endl;
+					std::cout << "1. Retry." << std::endl;
+					std::cout << "2. Create an account." << std::endl;
+					std::cout << "3. Need help to recover account." << std::endl;
+					std::cout << "4. Exit." << std::endl;
+					std::cout << "Please enter your choice number : ";
+					std::cin >> chooseFollow;
+					std::cout << std::endl;
+
+					switch (chooseFollow)
+					{
+					case 1:
+					{
+						attempt = 0;
+						loginForm(userLogin);
+						break;
+					}
+					case 2:
+					{
+						newAccount(userLogin);
+						break;
+					}
+					case 3:
+					{
+						accountRecover();
+						break;
+					}
+					case 4:
+					{
+						//exit out o the program
+						std::cout << "Thank you for using our program. Goodbye!" << std::endl;
+						exit(0);
+						break;
+					}
+					default:
+					{
+						std::cout << "Invalid choice. Please only choose the numbers 1 or 2 or 3" << std::endl;
+						break;
+					}
+					}
+
+				} while (attempt < 4);
+			}
+		}
+
+		} while (!userFound && attempt++ < 4);
 }
 
 void accountRecover()
@@ -200,6 +253,7 @@ void accountRecover()
 	int choice;
 	std::string userN, mail, passw, allerG, strictdiet, mailInput;
 	bool accountFound = false;
+	ifstream searchU("database.txt");
 	std::string line;
 
 		Line();
@@ -215,8 +269,9 @@ void accountRecover()
 		switch (choice)
 		{
 		case 1:
+
 		{
-            ifstream database("database.txt");
+
 			while (true)
 			{
 				std::cout << "\nWhat is your email adress?\nEmail :";
@@ -233,13 +288,20 @@ void accountRecover()
 			}
 
 			
-			while (database >> userN >> mail >> passw >> allerG >> strictdiet) 
+			while (getline(searchU, line)) 
 			{
-				if (mailInput == mail)
+				string name = line;
+				getline(searchU, line); //read email
+				if (line == mailInput)
 				{
+					getline(searchU, line); // read password
+					string password = line;
+					getline(searchU, line); // read allergies
+					string allergies = line;
+					getline(searchU, line); // read special diets
+					string diets = line;
 					accountFound = true;
 
-					database.close();
 					std::cout << std::endl;
 					std::cout << "\nAccount that matched your descrpition:\n\n";
 					std::cout << "Username :" << " " << userN;
