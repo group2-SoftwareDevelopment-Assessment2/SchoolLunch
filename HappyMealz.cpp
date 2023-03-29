@@ -21,24 +21,95 @@ struct MenuItem //Richard
 
 bool loginGetYN(); //MJ
 
-void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
+void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) 
+{
 	cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
 	std::cout << item.name << " added to cart." << std::endl;
 }
 
 std::vector<MenuItem> cart; // Richard // to create and empty cart vector
 
-bool ordering = true;
+bool ordering = true; //Richard
 
-void printCart(const std::vector<MenuItem>& cart) {
-	double total = 0;                               // Richard // this is to initialize the total price to 0
-	std::cout << "cart:" << std::endl;              // Richard // used to display the cart header
+void payment() //MJ
+{
+	//code a way to pay for the items in the cart
+	std::cout<<"How would you like to pay?"<<std::endl;
+	std::cout<<"1. Cash"<<std::endl;
+	std::cout<<"2. Credit Card"<<std::endl;
+	std::cout<<"3. Debit Card"<<std::endl;
+	std::cout<<"4. Put it on my tab"<<std::endl;
+	int choice;
+	std::cin>>choice;
+
+	if (choice == 1)
+	{
+		std::cout<<"Please pay the cashier"<<std::endl;
+	}
+	else if (choice == 2)
+	{
+		std::cout<<"Please swipe your card"<<std::endl;
+	}
+	else if (choice == 3)
+	{
+		std::cout<<"Please swipe your card"<<std::endl;
+	}
+	else if (choice == 4)
+	{
+		std::cout<<"Charge has been added to your account : "<<std::endl;
+		//add total to database.txt
+
+	}
+	else
+	{
+		std::cout<<"Invalid choice"<<std::endl;
+	}
+}
+
+void printCart(const std::vector<MenuItem>& cart) 
+{
+	double total = 0; // Richard // this is to initialize the total price to 0
+
+	std::cout << std::endl;
+	std::cout << "Your Cart:" << std::endl;   // Richard // used to display the cart header
+	std::cout << "----------------------------" << std::endl;
+
 	for (const auto& item : cart)
 	{
 		std::cout << item.name << " -$" << item.price << std::endl;
 		total += item.price;
 	}
+
+	std::cout << std::endl;
+	std::cout << "----------------------------" << std::endl;
 	std::cout << "Total price : $" << total << std::endl;
+	std::cout << "----------------------------" << std::endl;
+	std::cout << std::endl;
+
+	//adding a way to go back to the menu to order more items or to checkout
+
+	std::cout << "Press 'Esc' to continue shopping" << std::endl;
+	std::cout << "Press 'Enter' to checkout" << std::endl;
+	char choice;
+	std::cin >> choice;
+	//choice may only be backspace or enter
+	for (; choice != 27 || choice != 13; std::cin >> choice)
+	{
+		Line();
+		std::cout << std::endl;
+		std::cout << "Sorry, you choice is invalid. Press backspace to go back to the menu or press enter to checkout";
+		std::cout << std::endl;
+		Line();
+	}
+
+	if (choice == 27) //MJ // if the user presses backspace
+	{
+		ordering = true; //MJ  // to set the ordering to true to go back to the ordering loop
+	}
+	else if(choice == 13) //MJ  // if the user presses enter
+	{
+		ordering = false; //MJ // Richard // to set the ordering to false to exit the loop
+	}
 }
 
 void printMenu(const std::vector<MenuItem>& menu) {
@@ -73,14 +144,15 @@ void Ordering(const std::vector<MenuItem>& menu)
 		printMenu(menu);
 		std::cout << std::endl;
 		std::cout << "Enter the number of items you would like to order, or enter 0 to check out:" << std::endl;
+
 		int choice;
 		std::cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {     //Richard // If the user entered a valid menu item number
-			addToCart(cart, menu[choice - 1]);         // Richard // to add the selected product to the cart
+			addToCart(cart, menu[choice - 1]);         // Richard // to add the selected product to the cart	
 		}
 		else if (choice == 0) {
 			ordering = false;                          // Richard // to set the ordering to false to exit the loop
-						//add print cart function here
+			//add print cart function here
 			printCart(cart);
 		}
 		else {                                        // Richard // // If the user entered an invalid input
