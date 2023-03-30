@@ -6,6 +6,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<sstream>
+#include <Windows.h>
 using namespace std;
 
 void Line() //MJ
@@ -20,6 +21,81 @@ struct MenuItem //Richard
 };
 
 bool loginGetYN(); //MJ
+
+struct adminLogin  //MJ //creating a struct for the admin login
+{
+	std::string username;
+	std::string password;
+};
+
+void adminStartMenu() //MJ //StratMenu for the admin
+{
+	std::cout << "Welcome to the admin menu" << std::endl;
+	std::cout << "1. Add an item to the menu" << std::endl;
+	std::cout << "2. Remove an item from the menu" << std::endl;
+	std::cout << "3. View the menu" << std::endl;
+	std::cout << "4. View the orders" << std::endl;
+	std::cout << "5. View the users" << std::endl;
+	std::cout << "6. Log out" << std::endl;
+	//have admin choose
+	int choice;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+		//add item to menu
+	}
+	else if (choice == 2)
+	{
+		//remove item from menu
+	}
+	else if (choice == 3)
+	{
+		//view menu
+	}
+	else if (choice == 4)
+	{
+		//view orders
+	}
+	else if (choice == 5)
+	{
+		//view users
+	}
+	else if (choice == 6)
+	{
+		//log out
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+
+}
+
+
+bool adminOrUser()  //MJ // to ask the user if they are an admin or a user
+{
+	std::cout << "Are you an admin or a user?" << std::endl;
+	std::cout << "1. Admin" << std::endl;
+	std::cout << "2. User" << std::endl;
+	int choice;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+			std::cout << "You are the admin";
+		return true;
+
+	}
+	else if (choice == 2)
+	{
+		loginGetYN();
+		return false;
+
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+}
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) 
 {
@@ -193,6 +269,7 @@ void accountRecover(); //MJ
 
 void loginForm(login& userLogin) //MJ 
 {
+	double total = 0;
 	std::string name, mail, pass;
 	bool userFound = false;
 	fstream database;
@@ -253,7 +330,7 @@ void loginForm(login& userLogin) //MJ
 						std::cout << std::endl;
 						std::cout << "This will be the Menu for today" << std::endl;
 						Line();
-						Ordering(menuItems());
+						Ordering(menuItems(), total);
 
 						break;
 					}
@@ -362,7 +439,6 @@ void accountRecover()
 		case 1:
 
 		{
-
 			while (true)
 			{
 				std::cout << "\nWhat is your email adress?\nEmail :";
@@ -479,18 +555,18 @@ void accountRecover()
 		}
 		}
 	}
-
+	
 int main()
-{
+	{
 
-	Line();
-	std::cout << "The HappyMealz" << std::endl; //Just a heading for that this app will be
-	Line();
+		Line();
+		std::cout << "The HappyMealz" << std::endl; //Just a heading for that this app will be
+		Line();
 
-	loginGetYN();
+		adminOrUser();
 
-	return 0;
-}
+		return 0;
+	}
 
 void newAccount(login& userLogin)   //MJ
 {
@@ -571,6 +647,12 @@ bool loginGetYN() //MJ
 	{
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
 		loginGetYN();
+
+
 		return false;
 	}
 }
+
+
+
+
