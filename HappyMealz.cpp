@@ -153,7 +153,7 @@ std::vector<MenuItem> menuItems()  //Richard
 	return menu;
 }
 
-void Ordering(const std::vector<MenuItem>& menu)
+void Ordering(const std::vector<MenuItem>& menu, double total)
 {
 	while (ordering)// Richard
 	{ //  loop while the user is still ordering
@@ -170,7 +170,7 @@ void Ordering(const std::vector<MenuItem>& menu)
 		else if (choice == 0) {
 			ordering = false;                          // Richard // to set the ordering to false to exit the loop
 			//add print cart function here
-			printCart(cart);
+			printCart(cart, total);
 		}
 		else {                                        // Richard // // If the user entered an invalid input
 			std::cout << "Invalid choice, please enter a number between 1 and " << menu.size() << std::endl;
