@@ -31,7 +31,7 @@ std::vector<MenuItem> cart; // Richard // to create and empty cart vector
 
 bool ordering = true; //Richard
 
-void payment() //MJ
+void payment(double total) //MJ
 {
 	//code a way to pay for the items in the cart
 	std::cout<<"How would you like to pay?"<<std::endl;
@@ -44,11 +44,23 @@ void payment() //MJ
 
 	if (choice == 1)
 	{
-		std::cout<<"Please pay the cashier"<<std::endl;
+		double cash;
+		// total from cart
+		std::cout<<"Please enter the amount of cash you are paying with"<<std::endl;
+		std::cin>>cash;
+		if (cash < total)
+		{
+			std::cout<<"Sorry, you do not have enough money to pay for your order"<<std::endl;
+		}
+		else
+		{
+			std::cout<<"Your change is : "<<cash - total<<std::endl;
+		}
 	}
 	else if (choice == 2)
 	{
 		std::cout<<"Please swipe your card"<<std::endl;
+
 	}
 	else if (choice == 3)
 	{
@@ -66,9 +78,9 @@ void payment() //MJ
 	}
 }
 
-void printCart(const std::vector<MenuItem>& cart) 
+void printCart(const std::vector<MenuItem>& cart, double total) 
 {
-	double total = 0; // Richard // this is to initialize the total price to 0
+	total = 0; // Richard // this is to initialize the total price to 0
 
 	std::cout << std::endl;
 	std::cout << "Your Cart:" << std::endl;   // Richard // used to display the cart header
@@ -105,6 +117,11 @@ void printCart(const std::vector<MenuItem>& cart)
 	if (choice == 27) //MJ // if the user presses backspace
 	{
 		ordering = true; //MJ  // to set the ordering to true to go back to the ordering loop
+
+		if (ordering = true)
+		{
+			payment(total);
+		}
 	}
 	else if(choice == 13) //MJ  // if the user presses enter
 	{
