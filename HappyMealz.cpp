@@ -22,13 +22,13 @@ struct MenuItem //Richard
 
 bool loginGetYN(); //MJ
 
-struct adminLogin  //MJ //creating a struct for the admin login
+struct controlLogin  //MJ //creating a struct for the admin login
 {
 	std::string username;
 	std::string password;
 };
 
-void adminStartMenu() //MJ //StratMenu for the admin
+void adminStartMenu(controlLogin& control) //MJ //StratMenu for the admin
 {
 	std::cout << "Welcome to the admin menu" << std::endl;
 	std::cout << "1. Add an item to the menu" << std::endl;
@@ -58,7 +58,7 @@ void adminStartMenu() //MJ //StratMenu for the admin
 	}
 	else if (choice == 5)
 	{
-		//view users
+		//adminUserAccounts();
 	}
 	else if (choice == 6)
 	{
@@ -71,6 +71,43 @@ void adminStartMenu() //MJ //StratMenu for the admin
 
 }
 
+void controlLogForm(controlLogin& control) //MJ //admin login form
+{
+	std::string username, password;
+	int attempt = 0;
+
+	do
+	{
+		std::cout << "Please enter your username" << std::endl;
+		std::cin >> username;
+		std::cout << "Please enter your password" << std::endl;
+		std::cin >> password;
+
+		if (control.username == username && password == control.password)
+		{
+			Line();
+			std::cout << std::endl;
+			std::cout << "You are logged in" << std::endl;
+			std::cout << std::endl;
+			adminStartMenu(control);
+		}
+		else
+		{
+			std::cout << "Invalid username or password" << std::endl;
+		}
+		attempt++;
+
+		if (attempt < 4)
+		{
+			std::cout << std::endl;
+			std::cout << "Error! You have reached the maximum attempts" << std::endl;
+			std::cout << std::endl;
+			std::cout << "Please hit Enter to Exit out of program" << std::endl;
+			exit(0);
+		}
+
+	} while (attempt < 3);
+}
 
 bool adminOrUser()  //MJ // to ask the user if they are an admin or a user
 {
@@ -423,6 +460,7 @@ void accountRecover()
 	bool accountFound = false;
 	ifstream searchU("database.txt");
 	std::string line;
+	std::string passLine;
 
 		Line();
 		std::cout << "Account Recovery\n";
@@ -454,77 +492,87 @@ void accountRecover()
 				}
 			}
 
-			
+		std::cout << std::endl;
+					std::cout << "\nAccount that matched your descrpition:\n\n";	
 			while (getline(searchU, line)) 
 			{
+
 				string name = line;
+				
+					std::cout << "Username :" << " " << line;
+					std::cout << std::endl;
 				getline(searchU, line); //read email
+
 				if (line == mailInput)
 				{
-					getline(searchU, line); // read password
-					string password = line;
+					std::cout << "Email :" << " " << line;
+					std::cout << std::endl;
+					getline(searchU, passLine); // read password
+					string password = passLine;
 					getline(searchU, line); // read allergies
 					string allergies = line;
+					std::cout << "Allergies :" << " " << line;
+					std::cout << std::endl;
 					getline(searchU, line); // read special diets
 					string diets = line;
+					std::cout << "Diet requirements :" << " " << line;
+					std::cout << std::endl;
 					accountFound = true;
 
-					std::cout << std::endl;
-					std::cout << "\nAccount that matched your descrpition:\n\n";
-					std::cout << "Username :" << " " << userN;
-					std::cout << "Email :" << " " << mail;
-					std::cout << "Allergies :" << " " << allerG;
-					std::cout << "Diet requirements :" << " " << strictdiet;
-
-					std::cout << std::endl;
-					char confirm;
-					std::cout << "Is this you?\n";
-					std::cout << "y/n : ";
-					std::cin >> confirm;
-
-					if (confirm == 'y' || confirm == 'Y')
+					if (accountFound = true)
 					{
-						std::cout << "This is your password :" << passw;
 						std::cout << std::endl;
-						std::wcout << "Press ENTER to continue...";
-						loginForm(userLogin);
-					}
-					else if (confirm == 'n' || confirm == 'N')
-					{
-						char confirmA;
-						std::cout << "Would you like to create an accout? (y/n) : ";
-						std::cin >> confirmA;
-						if (confirmA == 'y' || confirmA == 'Y')
+						char confirm;
+						std::cout << "Is this you?\n";
+						std::cout << "y/n : ";
+						std::cin >> confirm;
+
+						if (confirm == 'y' || confirm == 'Y')
 						{
-							newAccount(userLogin);
+							std::cout << "This is your password :" << passLine;
+							std::cout << std::endl;
+							std::wcout << "Press ENTER to continue...";
+							std::cin.get();
+							std::cin.get();
+							std::cout << std::endl;
+							loginForm(userLogin);
 						}
-						else if (confirmA == 'n' || confirmA == 'N')
+						else if (confirm == 'n' || confirm == 'N')
 						{
-							Line();
-							std::cout << std::endl;
-							std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
-							std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
-							std::cout << std::endl;
-							std::cout << std::endl;
-							Line();
-							accountRecover();
+							char confirmA;
+							std::cout << "Would you like to create an accout? (y/n) : ";
+							std::cin >> confirmA;
+							if (confirmA == 'y' || confirmA == 'Y')
+							{
+								newAccount(userLogin);
+							}
+							else if (confirmA == 'n' || confirmA == 'N')
+							{
+								Line();
+								std::cout << std::endl;
+								std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+								std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+								std::cout << std::endl;
+								std::cout << std::endl;
+								Line();
+								accountRecover();
+							}
+							else
+							{
+								std::cout << "Please only enter 'y' or 'n' " << std::endl;
+								return; //should return to question on wheather user wants to create account
+							}
 						}
 						else
 						{
 							std::cout << "Please only enter 'y' or 'n' " << std::endl;
-							return; //should return to question on wheather user wants to create account
+							return;
 						}
+						break;
 					}
-					else
-					{
-						std::cout << "Please only enter 'y' or 'n' " << std::endl;
-						return;
-					}
-					break;
 				}
-				else
+				else if (accountFound = false)
 				{
-					accountFound = false;
                         std::cout << std::endl;
 						std::cout << "No account found with that email address.\n";
 						std::cout << std::endl;
@@ -555,7 +603,69 @@ void accountRecover()
 		}
 		}
 	}
-	
+
+void controlUserAccounts(login& userLogin, controlLogin& control)
+{
+	std::string line;
+	std::ifstream database("database.txt");
+	bool userFound = false;
+
+	//allow user to be able to log into user accounts by just typing in the username
+	std::cout << "Enter the username of the account you want to access : ";
+	std::cin >> userLogin.username;
+	//compare the username input with the username in the database
+
+	while (std::getline(database, line))
+	{
+		if (line == userLogin.username)
+		{
+			getline(database, line); // read email
+			if (line == userLogin.email)
+			{
+				userFound = true;
+				// read the rest of the user information
+				std::cout << "Hello" << " " << userLogin.username << std::endl;
+
+				getline(database, line); //read password
+				std::cout << "User password: " << line << endl;
+				getline(database, line); // read allergies
+				std::cout << "User allergies: " << line << endl;
+				getline(database, line); // read special diets
+				cout << "User special diets: " << line << endl;
+
+				// prompt admin to choose an action
+				int choice;
+				std::cout << "Choose an action:" << std::endl;
+				std::cout << "1. Edit account" << std::endl;
+				std::cout << "2. Delete account" << std::endl;
+				std::cout << "3. Exit" << std::endl;
+				std::cin >> choice;
+
+				switch (choice)
+				{
+				case 1:
+					// edit account
+					// prompt admin for account information and modify database
+					break;
+				case 2:
+					// delete account
+					// prompt admin for account information and remove account from database
+					break;
+				case 3:
+					// exit admin access
+					break;
+				default:
+					std::cout << "Invalid choice. Please choose again." << std::endl;
+					controlUserAccounts(userLogin, control);
+					break;
+				}
+				break;
+			}
+		}
+	}
+	database.close();
+}
+
 int main()
 	{
 
@@ -652,6 +762,8 @@ bool loginGetYN() //MJ
 		return false;
 	}
 }
+
+
 
 
 
