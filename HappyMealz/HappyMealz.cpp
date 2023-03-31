@@ -6,6 +6,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<sstream>
+#include <Windows.h>
 using namespace std;
 
 void Line() //MJ
@@ -13,41 +14,195 @@ void Line() //MJ
 	std::cout << "................................................................................................................." << std::endl;
 }
 
-struct MenuItem {
+struct MenuItem //Richard
+{
 	std::string name;
 	double price;
 };
 
 bool loginGetYN(); //MJ
 
-//bool checkAccount() {  // Richard
-//	bool hasAccount = loginGetYN();
-//	if (hasAccount) {
-		// Code to check if user has existing account
-//	}
-//	else {
-		// Code to create a new account
-//	}
-//}
+struct adminLogin  //MJ //creating a struct for the admin login
+{
+	std::string username;
+	std::string password;
+};
 
-void addToCart(std::vector<MenuItem>& cart, const MenuItem& item) {
+void adminStartMenu() //MJ //StratMenu for the admin
+{
+	std::cout << "Welcome to the admin menu" << std::endl;
+	std::cout << "1. Add an item to the menu" << std::endl;
+	std::cout << "2. Remove an item from the menu" << std::endl;
+	std::cout << "3. View the menu" << std::endl;
+	std::cout << "4. View the orders" << std::endl;
+	std::cout << "5. View the users" << std::endl;
+	std::cout << "6. Log out" << std::endl;
+	//have admin choose
+	int choice;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+		//add item to menu
+	}
+	else if (choice == 2)
+	{
+		//remove item from menu
+	}
+	else if (choice == 3)
+	{
+		//view menu
+	}
+	else if (choice == 4)
+	{
+		//view orders
+	}
+	else if (choice == 5)
+	{
+		//view users
+	}
+	else if (choice == 6)
+	{
+		//log out
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+
+}
+
+
+bool adminOrUser()  //MJ // to ask the user if they are an admin or a user
+{
+	std::cout << "Are you an admin or a user?" << std::endl;
+	std::cout << "1. Admin" << std::endl;
+	std::cout << "2. User" << std::endl;
+	int choice;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+		std::cout << "You are the admin";
+		return true;
+
+	}
+	else if (choice == 2)
+	{
+		loginGetYN();
+		return false;
+
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+}
+
+void addToCart(std::vector<MenuItem>& cart, const MenuItem& item)
+{
 	cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
 	std::cout << item.name << " added to cart." << std::endl;
 }
 
 std::vector<MenuItem> cart; // Richard // to create and empty cart vector
 
-bool ordering = true;
+bool ordering = true; //Richard
 
-void printCart(const std::vector<MenuItem>& cart) {
-	double total = 0;                               // Richard // this is to initialize the total price to 0
-	std::cout << "cart:" << std::endl;              // Richard // used to display the cart header
+void payment(double total) //MJ
+{
+	//code a way to pay for the items in the cart
+	std::cout << "How would you like to pay?" << std::endl;
+	std::cout << "1. Cash" << std::endl;
+	std::cout << "2. Credit Card" << std::endl;
+	std::cout << "3. Debit Card" << std::endl;
+	std::cout << "4. Put it on my tab" << std::endl;
+	int choice;
+	std::cin >> choice;
+
+	if (choice == 1)
+	{
+		double cash;
+		// total from cart
+		std::cout << "Please enter the amount of cash you are paying with" << std::endl;
+		std::cin >> cash;
+		if (cash < total)
+		{
+			std::cout << "Sorry, you do not have enough money to pay for your order" << std::endl;
+		}
+		else
+		{
+			std::cout << "Your change is : " << cash - total << std::endl;
+		}
+	}
+	else if (choice == 2)
+	{
+		std::cout << "Please swipe your card" << std::endl;
+
+	}
+	else if (choice == 3)
+	{
+		std::cout << "Please swipe your card" << std::endl;
+	}
+	else if (choice == 4)
+	{
+		std::cout << "Charge has been added to your account : " << std::endl;
+		//add total to database.txt
+
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+}
+
+void printCart(const std::vector<MenuItem>& cart, double total)
+{
+	total = 0; // Richard // this is to initialize the total price to 0
+
+	std::cout << std::endl;
+	std::cout << "Your Cart:" << std::endl;   // Richard // used to display the cart header
+	std::cout << "----------------------------" << std::endl;
+
 	for (const auto& item : cart)
 	{
 		std::cout << item.name << " -$" << item.price << std::endl;
 		total += item.price;
 	}
+
+	std::cout << std::endl;
+	std::cout << "----------------------------" << std::endl;
 	std::cout << "Total price : $" << total << std::endl;
+	std::cout << "----------------------------" << std::endl;
+	std::cout << std::endl;
+
+	//adding a way to go back to the menu to order more items or to checkout
+
+	std::cout << "Press 'Esc' to continue shopping" << std::endl;
+	std::cout << "Press 'Enter' to checkout" << std::endl;
+	char choice;
+	std::cin >> choice;
+	//choice may only be backspace or enter
+	for (; choice != 27 || choice != 13; std::cin >> choice)
+	{
+		Line();
+		std::cout << std::endl;
+		std::cout << "Sorry, you choice is invalid. Press backspace to go back to the menu or press enter to checkout";
+		std::cout << std::endl;
+		Line();
+	}
+
+	if (choice == 27) //MJ // if the user presses backspace
+	{
+		ordering = true; //MJ  // to set the ordering to true to go back to the ordering loop
+
+		if (ordering = true)
+		{
+			payment(total);
+		}
+	}
+	else if (choice == 13) //MJ  // if the user presses enter
+	{
+		ordering = false; //MJ // Richard // to set the ordering to false to exit the loop
+	}
 }
 
 void printMenu(const std::vector<MenuItem>& menu) {
@@ -74,7 +229,7 @@ std::vector<MenuItem> menuItems()  //Richard
 	return menu;
 }
 
-void Ordering(const std::vector<MenuItem>& menu)
+void Ordering(const std::vector<MenuItem>& menu, double total)
 {
 	while (ordering)// Richard
 	{ //  loop while the user is still ordering
@@ -82,13 +237,16 @@ void Ordering(const std::vector<MenuItem>& menu)
 		printMenu(menu);
 		std::cout << std::endl;
 		std::cout << "Enter the number of items you would like to order, or enter 0 to check out:" << std::endl;
+
 		int choice;
 		std::cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {     //Richard // If the user entered a valid menu item number
-			addToCart(cart, menu[choice - 1]);         // Richard // to add the selected product to the cart
+			addToCart(cart, menu[choice - 1]);         // Richard // to add the selected product to the cart	
 		}
 		else if (choice == 0) {
 			ordering = false;                          // Richard // to set the ordering to false to exit the loop
+			//add print cart function here
+			printCart(cart, total);
 		}
 		else {                                        // Richard // // If the user entered an invalid input
 			std::cout << "Invalid choice, please enter a number between 1 and " << menu.size() << std::endl;
@@ -107,11 +265,14 @@ struct login //MJ
 
 void newAccount(login& userLogin);   //MJ
 
+void accountRecover(); //MJ
+
 void loginForm(login& userLogin) //MJ 
 {
+	double total = 0;
 	std::string name, mail, pass;
+	bool userFound = false;
 	fstream database;
-
 
 	std::cout << "Great! Let's get you logged in" << std::endl;
 	Line();
@@ -149,34 +310,44 @@ void loginForm(login& userLogin) //MJ
 
 		while (std::getline(input, line))
 		{
-
-			std::stringstream ss(line);
-			ss >> name >> mail >> pass;
-
-			if (name == userLogin.username && mail == userLogin.email && pass == userLogin.password)
+			if (line == userLogin.username)
 			{
-				exist = 1;
-				break;
+				getline(input, line); // read email
+				if (line == userLogin.email)
+				{
+					getline(input, line); // read password
+					if (line == userLogin.password)
+					{
+						userFound = true;
+						getline(input, line); // read allergies
+						cout << "Your allergies: " << line << endl;
+						getline(input, line); // read special diets
+						cout << "Your special diets: " << line << endl;
+
+						std::cout << std::endl;
+						Line();
+						std::cout << "Hello" << " " << userLogin.username << std::endl;
+						std::cout << std::endl;
+						std::cout << "This will be the Menu for today" << std::endl;
+						Line();
+						Ordering(menuItems(), total);
+
+						break;
+					}
+				}
 			}
-
+			// skip the rest of the user information
+			getline(input, line); // read email
+			getline(input, line); // read password
+			getline(input, line); // read allergies
+			getline(input, line); // read special diets
 		}
-		if (exist == 1)
+		input.close();
+		if (!userFound)
 		{
-			std::cout << std::endl;
-			Line();
-			std::cout << "Hello" << " " << userLogin.username << std::endl;
-			std::cout << std::endl;
-			std::cout << "This will be the Menu for today" << std::endl;
-			Line();
-			Ordering(menuItems());
-		}
-		else
-		{
-
-
-			if (attempt < 3)
+			attempt++;
+			if (attempt < 4)
 			{
-				attempt++;
 				std::cout << std::endl;
 				std::cout << "Login failed. Please try again." << std::endl;
 				std::cout << "............................................................" << std::endl;
@@ -184,50 +355,225 @@ void loginForm(login& userLogin) //MJ
 			else
 			{
 				std::cout << std::endl;
-				std::cout << "Maximum number of login attepmts has been reached." << std::endl;
+				std::cout << "You have exceeded the maximum number of attempts." << std::endl;
+				std::cout << "Please try again later." << std::endl;
+				std::cout << "............................................................" << std::endl;
+
+				//menu displays if attempts are exceeded
 
 				int chooseFollow;
 
 				do
 				{
 					std::cout << "You can continue by choosing the following : " << std::endl;
+					std::cout << std::endl;
 					std::cout << "1. Retry." << std::endl;
 					std::cout << "2. Create an account." << std::endl;
-					std::cout << "3. Exit." << std::endl;
+					std::cout << "3. Need help to recover account." << std::endl;
+					std::cout << "4. Exit." << std::endl;
 					std::cout << "Please enter your choice number : ";
 					std::cin >> chooseFollow;
+					std::cout << std::endl;
 
 					switch (chooseFollow)
 					{
 					case 1:
+					{
+						attempt = 0;
 						loginForm(userLogin);
 						break;
+					}
 					case 2:
-						//new acc comment
+					{
+						newAccount(userLogin);
 						break;
+					}
 					case 3:
-						return;
-
+					{
+						accountRecover();
+						break;
+					}
+					case 4:
+					{
+						//exit out o the program
+						std::cout << "Thank you for using our program. Goodbye!" << std::endl;
+						exit(0);
+						break;
+					}
 					default:
+					{
 						std::cout << "Invalid choice. Please only choose the numbers 1 or 2 or 3" << std::endl;
 						break;
-
 					}
-				} while (chooseFollow != 3);
+					}
+
+				} while (attempt < 4);
 			}
 		}
-		input.close();
-	} while (attempt != 3);
+
+	} while (!userFound && attempt++ < 4);
+}
+
+void accountRecover()
+{
+	login userLogin; //to help define the parameters of other used funtions
+
+	int choice;
+	std::string userN, mail, passw, allerG, strictdiet, mailInput;
+	bool accountFound = false;
+	ifstream searchU("database.txt");
+	std::string line;
+
+	Line();
+	std::cout << "Account Recovery\n";
+	Line();
+
+	std::cout << "1. Search for account by email\n";
+	std::cout << "2. Go back to main menu\n";
+	std::cout << "3. Exit\n";
+	std::cout << "Enter your choice: ";
+	std::cin >> choice;
+
+	switch (choice)
+	{
+	case 1:
+
+	{
+		while (true)
+		{
+			std::cout << "\nWhat is your email adress?\nEmail :";
+			std::cin >> mailInput;
+
+			if (mailInput.find('@') != std::string::npos)
+			{
+				break;
+			}
+			else
+			{
+				std::cout << "Invalid email address. Please include '@' symbol." << std::endl;
+			}
+		}
+
+
+		while (getline(searchU, line))
+		{
+			string name = line;
+			getline(searchU, line); //read email
+			if (line == mailInput)
+			{
+				getline(searchU, line); // read password
+				string password = line;
+				getline(searchU, line); // read allergies
+				string allergies = line;
+				getline(searchU, line); // read special diets
+				string diets = line;
+				accountFound = true;
+
+				std::cout << std::endl;
+				std::cout << "\nAccount that matched your descrpition:\n\n";
+				std::cout << "Username :" << " " << userN;
+				std::cout << "Email :" << " " << mail;
+				std::cout << "Allergies :" << " " << allerG;
+				std::cout << "Diet requirements :" << " " << strictdiet;
+
+				std::cout << std::endl;
+				char confirm;
+				std::cout << "Is this you?\n";
+				std::cout << "y/n : ";
+				std::cin >> confirm;
+
+				if (confirm == 'y' || confirm == 'Y')
+				{
+					std::cout << "This is your password :" << passw;
+					std::cout << std::endl;
+					std::wcout << "Press ENTER to continue...";
+					loginForm(userLogin);
+				}
+				else if (confirm == 'n' || confirm == 'N')
+				{
+					char confirmA;
+					std::cout << "Would you like to create an accout? (y/n) : ";
+					std::cin >> confirmA;
+					if (confirmA == 'y' || confirmA == 'Y')
+					{
+						newAccount(userLogin);
+					}
+					else if (confirmA == 'n' || confirmA == 'N')
+					{
+						Line();
+						std::cout << std::endl;
+						std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+						std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+						std::cout << std::endl;
+						std::cout << std::endl;
+						Line();
+						accountRecover();
+					}
+					else
+					{
+						std::cout << "Please only enter 'y' or 'n' " << std::endl;
+						return; //should return to question on wheather user wants to create account
+					}
+				}
+				else
+				{
+					std::cout << "Please only enter 'y' or 'n' " << std::endl;
+					return;
+				}
+				break;
+			}
+			else
+			{
+				accountFound = false;
+				std::cout << std::endl;
+				std::cout << "No account found with that email address.\n";
+				std::cout << std::endl;
+				std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
+				std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
+				accountRecover();
+			}
+		}
+		break;
+	}
+	case 2:
+	{
+		//back to start
+		loginGetYN();
+		break;
+	}
+	case 3:
+	{
+		//exit out of the program
+		std::cout << "Thank you for using our program. Goodbye!" << std::endl;
+		exit(0);
+		return;
+	}
+	default:
+	{
+		std::cout << "Please only choose number '1' or '2' or '3'";
+		accountRecover();
+	}
+	}
 }
 
 int main()
-{
+{                                                // Richard // adding a fun banner for app name
 
-	Line();
-	std::cout << "The Happy Mealz" << std::endl; //Just a heading for that this app will be
-	Line();
+	cout << "***********************************************\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*           Welcome to HappyMealz!            *\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*                                             *\n"
+		<< "*   We hope you enjoy using our new platform  *\n"
+		<< "***********************************************\n";
 
-	loginGetYN();
+
+	adminOrUser();
 
 	return 0;
 }
@@ -238,8 +584,8 @@ void newAccount(login& userLogin)   //MJ
 	newUser.username;
 	newUser.email;
 	newUser.password;
-	//newUser.allergy;
-	//newUser.diet;
+	newUser.allergy;
+	newUser.diet;
 
 	std::cout << "Let's create a new Account" << std::endl;
 	Line();
@@ -247,23 +593,44 @@ void newAccount(login& userLogin)   //MJ
 	std::cin.ignore();
 	std::getline(std::cin, newUser.username);
 	std::cout << "Add your email address :";
-	std::cin >> newUser.email;
+
+	while (true) //adding a condition that forces user to use the @ symbol in email input field
+	{
+
+		std::getline(std::cin, newUser.email);
+
+		if (newUser.email.find('@') != std::string::npos)
+		{
+			break;
+		}
+		else
+		{
+			std::cout << "Invalid email address. Please include '@' symbol." << std::endl;
+		}
+	}
+
 	std::cout << "Choose your password :";
-	std::cin >> newUser.password;
-	//std::cout << "Do you have any allergies :";
-	//std::cin >> newUser.allergy;
-	//std::cout << "Is there any special diets that we need to consider (lactose intolerance,etc.) : ";
-	//std::cin.ignore();
-	//std::getline(std::cin, newUser.diet);
+	std::getline(std::cin, newUser.password);
+	std::cout << "Do you have any allergies :";
+	std::getline(std::cin, newUser.allergy);
+	std::cout << "Is there any special diets that we need to consider (lactose intolerance,etc.) : ";
+	std::getline(std::cin, newUser.diet);
 
 	std::ofstream regUser("database.txt", std::ios::app);
-	regUser << newUser.username << ' ' << newUser.email << ' ' << newUser.password << ' ' << std::endl;
-	//newUser.allergy << ' ' << newUser.diet <<
+	regUser << newUser.username << "\n";
+	regUser << newUser.email << "\n";
+	regUser << newUser.password << "\n";
+	regUser << newUser.allergy << "\n";
+	regUser << newUser.diet << "\n";
+	regUser.close();
+
 	Line();
 	std::cout << "REGISTERATION WAS SUCCESSFULL\n";
 	Line();
-
-	loginForm(userLogin);
+	std::cout << "THANK YOU\n";
+	std::cout << "PLEASE PRESS ENTER TWICE TO EXIT AND RESTART THE PROGRAM\n";
+	std::cin.get();
+	std::exit(0);
 }
 
 bool loginGetYN() //MJ
@@ -289,6 +656,13 @@ bool loginGetYN() //MJ
 	else
 	{
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
+		loginGetYN();
+
+
 		return false;
 	}
 }
+
+
+
+

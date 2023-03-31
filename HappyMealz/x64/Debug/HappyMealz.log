@@ -1,1 +1,3 @@
-﻿  HappyMealz.vcxproj -> C:\Users\Home\source\repos\HappyMealz.cpp\x64\Debug\HappyMealz.exe
+﻿  HappyMealz.cpp
+C:\Users\Home\OneDrive\Desktop\HappyMealz\HappyMealz\HappyMealz.cpp(98): warning C4715: 'adminOrUser': not all control paths return a value
+  HappyMealz.vcxproj -> C:\Users\Home\source\repos\HappyMealz.cpp\x64\Debug\HappyMealz.exe
