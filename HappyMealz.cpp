@@ -32,7 +32,7 @@ struct MenuItem //Richard
 
 MenuItem newItem("1 Cheeseburger 2.99", 2.99);
 
-bool loginGetYN(); //MJ
+bool loginGetYN(std::string* usernamePtr); //MJ
 
 struct controlLogin  //MJ //creating a struct for the admin login
 {
@@ -90,7 +90,9 @@ void payment(double total) //MJ
 	}
 }
 
-void printCart(const std::vector<MenuItem>& cart, double total)
+//****Print cart funtion
+
+void printCart(const std::vector<MenuItem>& cart, double total) //Richard
 {
 	total = 0; // Richard // this is to initialize the total price to 0
 
@@ -146,7 +148,7 @@ void addToCart(std::vector<MenuItem>& cart, const MenuItem& item)
 	std::cout << item.name << " added to cart." << std::endl;
 }
 
-void printMenu(const std::vector<MenuItem>& menu) 
+void printMenu(const std::vector<MenuItem>& menu) //Richard
 {
 	cout << "\nThis is our menu for today, please remember to order before 11am to have the orders ready for the next day:" << endl;
 	cout << "-----------------------------------------------------------\n";
@@ -176,6 +178,27 @@ std::vector<MenuItem> menuItems()  //Richard
 	return menu;
 }
 
+struct login //MJ 
+{
+	std::string username;  //a struct that can be used for the login form
+	std::string email;
+	std::string password;
+	std::string allergy;
+	std::string diet;
+};
+
+//create a structure for admin login
+
+struct adminLogin //MJ
+{
+	std::string adminUsername;
+	std::string adminPassword;
+};
+
+void newAccount(login& userLogin);   //MJ
+
+void accountRecover(std::string* usernamePtr); //MJ
+
 void Ordering(const std::vector<MenuItem>& menu, double total)
 {
 	vector<MenuItem> cart;
@@ -203,25 +226,15 @@ void Ordering(const std::vector<MenuItem>& menu, double total)
 	}
 }
 
-struct login //MJ 
-{
-	std::string username;  //a struct that can be used for the login form
-	std::string email;
-	std::string password;
-	std::string allergy;
-	std::string diet;
-};
-
-void newAccount(login& userLogin);   //MJ
-
-void accountRecover(); //MJ
-
-void loginForm(login& userLogin) //MJ 
+void loginForm(login& userLogin, std::string* usernamePtr) //MJ 
 {
 	double total = 0;
 	std::string name, mail, pass;
 	bool userFound = false;
 	fstream database;
+
+	//save username in a pointer
+	usernamePtr = &userLogin.username; //assign address of username to ptr variable
 
 	std::cout << "Great! Let's get you logged in" << std::endl;
 	Line();
@@ -329,7 +342,7 @@ void loginForm(login& userLogin) //MJ
 					case 1:
 					{
 						attempt = 0;
-						loginForm(userLogin);
+						loginForm(userLogin, usernamePtr);
 						break;
 					}
 					case 2:
@@ -339,7 +352,7 @@ void loginForm(login& userLogin) //MJ
 					}
 					case 3:
 					{
-						accountRecover();
+						accountRecover(usernamePtr);
 						break;
 					}
 					case 4:
@@ -363,7 +376,19 @@ void loginForm(login& userLogin) //MJ
 	} while (!userFound && attempt++ < 4);
 }
 
-void accountRecover()
+//print the order
+
+void printSaveOrder(std::string* usernamePtr) //MJ
+{
+	std::cout << std::endl;
+	printf("An order for",usernamePtr);
+	std::cout << "has been saved." << std::endl;
+	std::cout << std::endl;
+	std::cout << "Order details : " << std::endl;
+	Line();
+}
+
+void accountRecover(std::string* usernamePtr) //MJ
 {
 	login userLogin; //to help define the parameters of other used funtions
 
@@ -447,7 +472,7 @@ void accountRecover()
 						std::cin.get();
 						std::cin.get();
 						std::cout << std::endl;
-						loginForm(userLogin);
+						loginForm(userLogin, usernamePtr);
 					}
 					else if (confirm == 'n' || confirm == 'N')
 					{
@@ -467,7 +492,7 @@ void accountRecover()
 							std::cout << std::endl;
 							std::cout << std::endl;
 							Line();
-							accountRecover();
+							accountRecover(usernamePtr);
 						}
 						else
 						{
@@ -490,7 +515,7 @@ void accountRecover()
 				std::cout << std::endl;
 				std::cout << "If you're having problems loggin in, please contact out IT Team:\n";
 				std::cout << "\nMJ / Richard :\t itInfo@gmail.com\n";
-				accountRecover();
+				accountRecover(usernamePtr);
 			}
 		}
 		break;
@@ -498,7 +523,7 @@ void accountRecover()
 	case 2:
 	{
 		//back to start
-		loginGetYN();
+		loginGetYN(usernamePtr);
 		break;
 	}
 	case 3:
@@ -511,12 +536,12 @@ void accountRecover()
 	default:
 	{
 		std::cout << "Please only choose number '1' or '2' or '3'";
-		accountRecover();
+		accountRecover(usernamePtr);
 	}
 	}
 }
 
-void controlUserAccounts(login& userLogin, controlLogin& control)
+void controlUserAccounts(login& userLogin, controlLogin& control) //MJ
 {
 	std::string line;
 	std::ifstream database("database.txt");
@@ -580,6 +605,53 @@ void controlUserAccounts(login& userLogin, controlLogin& control)
 
 void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem); //MJ //StratMenu for the admin
 
+//create a login form for admin
+
+void adminLoginForm(adminLogin& admin, controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ
+{
+	//the admin username and password is hardcoded
+
+	admin.adminUsername = "admin";
+	admin.adminPassword = "lunch";
+	std::string userName, passWord;
+	int attempt = 0; //going to add a max attempt of 3
+
+	do
+	{
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "Admin Login" << std::endl;
+		std::cout << std::endl;
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "Username : ";
+		std::cin >> userName;
+		std::cout << "Password :  ";
+		std::cin >> passWord;
+
+		if (userName == admin.adminUsername && passWord == admin.adminPassword)
+		{
+			Line();
+			std::cout << std::endl;
+			std::cout << "Welcome Admin" << std::endl;
+			std::cout << std::endl;
+			Line();
+			adminStartMenu(control, menu, newItem);
+		}
+		else
+		{
+			std::cout << "Invalid username or password" << std::endl;
+			std::cout << "Please try again" << std::endl;
+		}
+
+		attempt++;
+
+	} while (attempt < 3);
+
+}
+
 void controlLogForm(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ //admin login form
 {
 	std::string username, password;
@@ -618,7 +690,7 @@ void controlLogForm(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	} while (attempt < 3);
 }
 
-void adminOrUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)  //MJ // to ask the user if they are an admin or a user
+void adminOrUser(adminLogin& admin, controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem, std::string* usernamePtr)  //MJ // to ask the user if they are an admin or a user
 {
 	std::cout << "Are you an admin or a user?" << std::endl;
 	std::cout << "1. Admin" << std::endl;
@@ -633,28 +705,28 @@ void adminOrUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& n
 	{ // check if input is a valid integer
 		if (choice == 1)
 		{
-			adminStartMenu(control, menu, newItem);
+			adminLoginForm(admin, control, menu, newItem);
 		}
 		else if (choice == 2)
 		{
-			loginGetYN();
+			loginGetYN(usernamePtr);
 		}
 		else
 		{
 			std::cout << "Invalid choice" << std::endl;
-			adminOrUser(control, menu, newItem);
+			adminOrUser(admin, control, menu, newItem, usernamePtr);
 		}
 	}
 	else
 	{ // handle invalid input (non-integer)
 		std::cout << "Invalid input. Please enter a number." << std::endl;
-		adminOrUser(control, menu, newItem);
+		adminOrUser(admin, control, menu, newItem, usernamePtr);
 	}
 }
 
 //write a funtion that allows the admin to change MenuItems
 
-std::vector<MenuItem> modifyMenu(std::vector<MenuItem> menu, MenuItem& newItem)
+std::vector<MenuItem> modifyMenu(std::vector<MenuItem> menu, MenuItem& newItem) //MJ
 {
 	controlLogin control; //create an instance of the controlLogin class
 
@@ -725,7 +797,7 @@ std::vector<MenuItem> modifyMenu(std::vector<MenuItem> menu, MenuItem& newItem)
 }
 
 //creating a way for the admin to add a new menu items or remove an existing one
-std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& newItem)
+std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& newItem) //MJ
 {
 	controlLogin control; //create an instance of the controlLogin class
 
@@ -836,7 +908,7 @@ std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& new
 
 //create a way for the admin to view all users
 
-void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)
+void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ
 {
 	// Open database.txt
 	std::ifstream file("database.txt");
@@ -866,10 +938,12 @@ void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	adminStartMenu(control,menu,newItem);
 }
 
-int main()
+int main() 
 {
+	adminLogin admin; //creating an instance of the adminLogin class
 	controlLogin control; //adding the structure for the admin
 	std::vector<MenuItem> menu = menuItems(); // create the menu vector
+	std::string* usernamePtr = nullptr; //pointer to the username
 
 	cout << "***********************************************\n"
 		<< "*                                             *\n"
@@ -884,7 +958,7 @@ int main()
 		<< "*   We hope you enjoy using our new platform  *\n"
 		<< "***********************************************\n";
 
-	adminOrUser(control, menu, newItem);
+	adminOrUser(admin, control, menu, newItem, usernamePtr);
 
 	return 0;
 }
@@ -944,7 +1018,7 @@ void newAccount(login& userLogin)   //MJ
 	std::exit(0);
 }
 
-bool loginGetYN() //MJ
+bool loginGetYN(std::string* usernamePtr) //MJ
 {
 	char answer;
 	login userLogin;
@@ -956,7 +1030,7 @@ bool loginGetYN() //MJ
 	if (answer == 'y' || answer == 'Y')
 	{
 
-		loginForm(userLogin);
+		loginForm(userLogin, usernamePtr);
 		return true;
 	}
 	else if (answer == 'n' || answer == 'N')
@@ -967,7 +1041,7 @@ bool loginGetYN() //MJ
 	else
 	{
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
-		loginGetYN();
+		loginGetYN(usernamePtr);
 
 
 		return false;
@@ -976,10 +1050,8 @@ bool loginGetYN() //MJ
 
 void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ //StratMenu for the admin
 {
-      //2 and 3 is going to merge
-      //4. We can only continue with this once Richard added is code updates
-
-	std::cout << "This is your options" << std::endl;
+	std::cout << std::endl;
+	std::cout << "This is your start menu :" << std::endl;
 	std::cout << std::endl;
 	std::cout << "1. Modify an item in the menu" << std::endl;
 	std::cout << "2. Remove or add an item from the menu" << std::endl; 
@@ -1001,7 +1073,7 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	}
 	else if (choice == 3)
 	{
-		//view menu
+		//view orders
 	}
 	else if (choice == 4)
 	{
@@ -1010,7 +1082,15 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	}
 	else if (choice == 5)
 	{
-		//adminUserAccounts();
+		//exit the program
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "You have been logged out" << std::endl;
+		std::cout << std::endl;
+		Line();
+		Line();
+		std::exit(0);
 	}
 	else
 	{
