@@ -212,6 +212,14 @@ struct login //MJ
 	std::string diet;
 };
 
+//create a structure for admin login
+
+struct adminLogin //MJ
+{
+	std::string adminUsername;
+	std::string adminPassword;
+};
+
 void newAccount(login& userLogin);   //MJ
 
 void accountRecover(); //MJ
@@ -580,6 +588,53 @@ void controlUserAccounts(login& userLogin, controlLogin& control)
 
 void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem); //MJ //StratMenu for the admin
 
+//create a login form for admin
+
+void adminLoginForm(adminLogin& admin, controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)
+{
+	//the admin username and password is hardcoded
+
+	admin.adminUsername = "admin";
+	admin.adminPassword = "lunch";
+	std::string userName, passWord;
+	int attempt = 0; //going to add a max attempt of 3
+
+	do
+	{
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "Admin Login" << std::endl;
+		std::cout << std::endl;
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "Username : ";
+		std::cin >> userName;
+		std::cout << "Password :  ";
+		std::cin >> passWord;
+
+		if (userName == admin.adminUsername && passWord == admin.adminPassword)
+		{
+			Line();
+			std::cout << std::endl;
+			std::cout << "Welcome Admin" << std::endl;
+			std::cout << std::endl;
+			Line();
+			adminStartMenu(control, menu, newItem);
+		}
+		else
+		{
+			std::cout << "Invalid username or password" << std::endl;
+			std::cout << "Please try again" << std::endl;
+		}
+
+		attempt++;
+
+	} while (attempt < 3);
+
+}
+
 void controlLogForm(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ //admin login form
 {
 	std::string username, password;
@@ -618,7 +673,7 @@ void controlLogForm(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	} while (attempt < 3);
 }
 
-void adminOrUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)  //MJ // to ask the user if they are an admin or a user
+void adminOrUser(adminLogin& admin, controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)  //MJ // to ask the user if they are an admin or a user
 {
 	std::cout << "Are you an admin or a user?" << std::endl;
 	std::cout << "1. Admin" << std::endl;
@@ -633,7 +688,7 @@ void adminOrUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& n
 	{ // check if input is a valid integer
 		if (choice == 1)
 		{
-			adminStartMenu(control, menu, newItem);
+			adminLoginForm(admin, control, menu, newItem);
 		}
 		else if (choice == 2)
 		{
@@ -642,13 +697,13 @@ void adminOrUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& n
 		else
 		{
 			std::cout << "Invalid choice" << std::endl;
-			adminOrUser(control, menu, newItem);
+			adminOrUser(admin, control, menu, newItem);
 		}
 	}
 	else
 	{ // handle invalid input (non-integer)
 		std::cout << "Invalid input. Please enter a number." << std::endl;
-		adminOrUser(control, menu, newItem);
+		adminOrUser(admin, control, menu, newItem);
 	}
 }
 
@@ -868,6 +923,7 @@ void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 
 int main()
 {
+	adminLogin admin; //creating an instance of the adminLogin class
 	controlLogin control; //adding the structure for the admin
 	std::vector<MenuItem> menu = menuItems(); // create the menu vector
 
@@ -884,7 +940,7 @@ int main()
 		<< "*   We hope you enjoy using our new platform  *\n"
 		<< "***********************************************\n";
 
-	adminOrUser(control, menu, newItem);
+	adminOrUser(admin, control, menu, newItem);
 
 	return 0;
 }
@@ -976,10 +1032,8 @@ bool loginGetYN() //MJ
 
 void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ //StratMenu for the admin
 {
-      //2 and 3 is going to merge
-      //4. We can only continue with this once Richard added is code updates
-
-	std::cout << "This is your options" << std::endl;
+	std::cout << std::endl;
+	std::cout << "This is your start menu :" << std::endl;
 	std::cout << std::endl;
 	std::cout << "1. Modify an item in the menu" << std::endl;
 	std::cout << "2. Remove or add an item from the menu" << std::endl; 
@@ -1001,7 +1055,7 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	}
 	else if (choice == 3)
 	{
-		//view menu
+		//view orders
 	}
 	else if (choice == 4)
 	{
@@ -1010,7 +1064,15 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	}
 	else if (choice == 5)
 	{
-		//adminUserAccounts();
+		//exit the program
+		Line();
+		Line();
+		std::cout << std::endl;
+		std::cout << "You have been logged out" << std::endl;
+		std::cout << std::endl;
+		Line();
+		Line();
+		std::exit(0);
 	}
 	else
 	{
