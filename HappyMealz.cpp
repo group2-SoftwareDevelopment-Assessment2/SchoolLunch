@@ -89,7 +89,7 @@ void payment(double total) //MJ
 
 void printCart(const std::vector<MenuItem>& cart, double total)
 {
-	total = 0; // Richard // this is to initialize the total price to 0
+	 total = 0; // Richard // this is to initialize the total price to 0
 
 	std::cout << std::endl;
 	std::cout << "Your Cart:" << std::endl;   // Richard // used to display the cart header
@@ -107,54 +107,8 @@ void printCart(const std::vector<MenuItem>& cart, double total)
 	std::cout << "----------------------------" << std::endl;
 	std::cout << std::endl;
 
-	//adding a way to go back to the menu to order more items or to checkout
 
-	std::cout << "Press 'Esc' to continue shopping" << std::endl;
-	std::cout << "Press 'Enter' to checkout" << std::endl;
-	char choice;
-	std::cin >> choice;
-	//choice may only be backspace or enter
-	for (; choice != 27 || choice != 13; std::cin >> choice)
-	{
-		Line();
-		std::cout << std::endl;
-		std::cout << "Sorry, you choice is invalid. Press backspace to go back to the menu or press enter to checkout";
-		std::cout << std::endl;
-		Line();
-	}
 
-	if (choice == 27) //MJ // if the user presses backspace
-	{
-		ordering = true; //MJ  // to set the ordering to true to go back to the ordering loop
-
-		if (ordering = true)
-		{
-			payment(total);
-		}
-	}
-	else if (choice == 13) //MJ  // if the user presses enter
-	{
-		ordering = false; //MJ // Richard // to set the ordering to false to exit the loop
-	}
-}
-
-void addToCart(vector<MenuItem>& cart, const MenuItem& item) {
-	cart.push_back(item);
-	cout << item.name << " added to cart." << endl;
-}
-
-void printCart(const vector<MenuItem>& cart) {
-	double total = 0;
-	cout << "\nCart:" << endl;
-	cout << "-----------------------------------------------------------\n";
-	cout << "| Unit # | Product Description            | Price           |\n";
-	cout << "-----------------------------------------------------------\n";
-	for (const auto& item : cart) {
-		printf("| %-7d| %-30s| $%-15.2f|\n", item.unitNumber, item.name.c_str(), item.price);
-		total += item.price;
-	}
-	cout << "-----------------------------------------------------------\n";
-	cout << "Total price: $" << total << endl;
 }
 
 void printMenu(const vector<MenuItem>& menu) {
@@ -186,6 +140,8 @@ vector<MenuItem> menuItems() {
 
 void Ordering(const vector<MenuItem>& menu) {
 	vector<MenuItem> cart;
+	double total = 0; // declare total here
+
 	while (true) {
 		cout << endl;
 		printMenu(menu);
@@ -197,18 +153,20 @@ void Ordering(const vector<MenuItem>& menu) {
 			addToCart(cart, menu[choice - 1]);
 		}
 		else if (choice == 0) {
-			printCart(cart);
+			printCart(cart, total); // pass total as argument
 			return;
 		}
 		else if (choice == 9) {
-			printCart(cart);
+			printCart(cart, total); // pass total as argument
 			cart.clear();
+			total = 0; // reset total
 		}
 		else {
 			cout << "Invalid choice, please enter a number between 1 and " << menu.size() << endl;
 		}
 	}
 }
+
 
 
 struct login //MJ 
@@ -287,7 +245,7 @@ void loginForm(login& userLogin) //MJ
 						std::cout << std::endl;
 						std::cout << "This will be the Menu for today" << std::endl;
 						Line();
-						Ordering(menuItems();
+						Ordering(menuItems());
 
 						break;
 					}
