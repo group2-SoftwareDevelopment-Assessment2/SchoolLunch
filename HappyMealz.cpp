@@ -4,12 +4,12 @@
 #include <vector>
 #include<istream>
 #include<fstream>
-#include<stdlib.h>
+#include<stdlib.h>                                                                                      
 #include<sstream>
 #include <limits>
 using namespace std;
 
-void Line() //MJ
+void Line() //MJ                         
 {
 	std::cout << "................................................................................................................." << std::endl;
 }
@@ -199,31 +199,47 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
+
 void Ordering(const std::vector<MenuItem>& menu, double total)
 {
 	vector<MenuItem> cart;
 	while (true) {
-		cout << endl;
-		printMenu(menu);
-		cout << endl;
+		// ...
 		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit, or enter 9 to check out and continue ordering:" << endl;
 		int choice;
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
-			addToCart(cart, menu[choice - 1]);
+			// ...
 		}
 		else if (choice == 0) {
-			printCart(cart, total);
-			return;
+			// ...
+			break;
 		}
 		else if (choice == 9) {
-			printCart(cart, total);
-			cart.clear();
+			// ...
+		}
+		else if (choice == 99) {
+			// remove an item from the cart
+			cout << "Enter the index of the item you would like to remove:" << endl;
+			int index;
+			cin >> index;
+			removeFromCart(cart, index);
 		}
 		else {
-			cout << "Invalid choice, please enter a number between 1 and " << menu.size() << endl;
+			cout << "Invalid choice" << endl;
 		}
 	}
+
+}
+
+void removeFromCart(std::vector<MenuItem>& cart, int index)
+{
+	if (index < 0 || index >= cart.size()) {
+		std::cout << "Invalid index" << std::endl;
+		return;
+	}
+	std::cout << cart[index].name << " removed from cart." << std::endl;
+	cart.erase(cart.begin() + index);
 }
 
 void loginForm(login& userLogin, std::string* usernamePtr) //MJ 
