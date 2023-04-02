@@ -34,6 +34,8 @@ MenuItem newItem("1 Cheeseburger 2.99", 2.99);
 
 bool loginGetYN(std::string* usernamePtr); //MJ
 
+void payment(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart);
+
 struct controlLogin  //MJ //creating a struct for the admin login
 {
 	std::string username;
@@ -44,60 +46,14 @@ std::vector<MenuItem> cart; // Richard // to create and empty cart vector
 
 bool ordering = true; //Richard
 
-void payment(double total) //MJ
-{
-	//code a way to pay for the items in the cart
-	std::cout << "How would you like to pay?" << std::endl;
-	std::cout << "1. Cash" << std::endl;
-	std::cout << "2. Credit Card" << std::endl;
-	std::cout << "3. Debit Card" << std::endl;
-	std::cout << "4. Put it on my tab" << std::endl;
-	int choice;
-	std::cin >> choice;
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr);
 
-	if (choice == 1)
-	{
-		double cash;
-		// total from cart
-		std::cout << "Please enter the amount of cash you are paying with" << std::endl;
-		std::cin >> cash;
-		if (cash < total)
-		{
-			std::cout << "Sorry, you do not have enough money to pay for your order" << std::endl;
-		}
-		else
-		{
-			std::cout << "Your change is : " << cash - total << std::endl;
-		}
-	}
-	else if (choice == 2)
-	{
-		std::cout << "Please swipe your card" << std::endl;
-
-	}
-	else if (choice == 3)
-	{
-		std::cout << "Please swipe your card" << std::endl;
-	}
-	else if (choice == 4)
-	{
-		std::cout << "Charge has been added to your account : " << std::endl;
-		//add total to database.txt
-	}
-	else
-	{
-		std::cout << "Invalid choice" << std::endl;
-	}
-}
-
-//****Print cart funtion
-
-void printCart(const std::vector<MenuItem>& cart, double total) //Richard
+void printCart(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //Richard
 {
 	total = 0; // Richard // this is to initialize the total price to 0
 
 	std::cout << std::endl;
-	std::cout << "Your Cart:" << std::endl;   // Richard // used to display the cart header
+	std::cout << "Cart for:"<<*usernamePtr << std::endl;   // Richard // used to display the cart header
 	std::cout << "----------------------------" << std::endl;
 
 	for (const auto& item : cart)
@@ -111,35 +67,6 @@ void printCart(const std::vector<MenuItem>& cart, double total) //Richard
 	std::cout << "Total price : $" << total << std::endl;
 	std::cout << "----------------------------" << std::endl;
 	std::cout << std::endl;
-	//adding a way to go back to the menu to order more items or to checkout
-
-	std::cout << "Press 'Esc' to continue shopping" << std::endl;
-	std::cout << "Press 'Enter' to checkout" << std::endl;
-	char choice;
-	std::cin >> choice;
-	//choice may only be backspace or enter
-	for (; choice != 27 && choice != 13; std::cin >> choice)
-	{
-		Line();
-		std::cout << std::endl;
-		std::cout << "Sorry, you choice is invalid. Press backspace to go back to the menu or press enter to checkout";
-		std::cout << std::endl;
-		Line();
-	}
-
-	if (choice == 27) //MJ // if the user presses backspace
-	{
-		ordering = true; //MJ  // to set the ordering to true to go back to the ordering loop
-
-		if (ordering = true)
-		{
-			payment(total);
-		}
-	}
-	else if (choice == 13) //MJ  // if the user presses enter
-	{
-		ordering = false; //MJ // Richard // to set the ordering to false to exit the loop
-	}
 }
 
 void addToCart(std::vector<MenuItem>& cart, const MenuItem& item)
@@ -199,8 +126,7 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
-
-void Ordering(const std::vector<MenuItem>& menu, double total)
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr)
 {
 	vector<MenuItem> cart;
 	while (true) {
@@ -212,18 +138,13 @@ void Ordering(const std::vector<MenuItem>& menu, double total)
 			// ...
 		}
 		else if (choice == 0) {
-			// ...
-			break;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
+			payment(menu, total, usernamePtr, cart);
+			return;
 		}
 		else if (choice == 9) {
-			// ...
-		}
-		else if (choice == 99) {
-			// remove an item from the cart
-			cout << "Enter the index of the item you would like to remove:" << endl;
-			int index;
-			cin >> index;
-			removeFromCart(cart, index);
+			printCart(menu, total, usernamePtr, cart);
+			cart.clear();
 		}
 		else {
 			cout << "Invalid choice" << endl;
@@ -308,7 +229,7 @@ void loginForm(login& userLogin, std::string* usernamePtr) //MJ
 						std::cout << std::endl;
 						std::cout << "This will be the Menu for today" << std::endl;
 						Line();
-						Ordering(menuItems(), total);
+						Ordering(menuItems(), total, usernamePtr);
 
 						break;
 					}
@@ -392,16 +313,232 @@ void loginForm(login& userLogin, std::string* usernamePtr) //MJ
 	} while (!userFound && attempt++ < 4);
 }
 
-//print the order
-
-void printSaveOrder(std::string* usernamePtr) //MJ
+void payment(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //MJ
 {
+	//print the cart
+	printCart(menu, total, usernamePtr, cart);
+
+	//ask user if they'd like to add more items to cart or checkout
+
+	std::cout << "1. Continue shopping";
+	std::cout << "\n2. Checkout";
 	std::cout << std::endl;
-	printf("An order for",usernamePtr);
-	std::cout << "has been saved." << std::endl;
+
+	std::string input;
+	std::getline(std::cin, input); // read input as a string
+
+	int choice;
+	std::stringstream ss(input);
+	if (ss >> choice)
+	{ // check if input is a valid integer
+		if (choice == 1)
+		{
+			Line();
+			std::cout << std::endl;
+			std::cout << "You selected : Continue Shopping" << std::endl;
+			std::cout << std::endl;
+			Line();
+			//continue shopping
+			Ordering(menu, total, usernamePtr);
+		}
+		else if (choice == 2)
+		{
+			Line();
+			std::cout << std::endl;
+			std::cout << "You selected : Checkout" << std::endl;
+			std::cout << std::endl;
+			Line();
+			//continue
+		}
+		else
+		{
+			std::cout << "Invalid choice" << std::endl;
+			printCart(menu, total, usernamePtr, cart);
+		}
+	}
+	else
+	{ // handle invalid input (non-integer)
+		std::cout << "Invalid input. Please enter a number." << std::endl;
+		printCart(menu, total, usernamePtr, cart);
+	}
+
+	//ASK IF THEY HAVE A COUPON CODE
+	std::cout << "Do you have a coupon code? (Y/N)" << std::endl;
+	std::string couponYN;
+	std::getline(std::cin, couponYN);
+	if (couponYN == "Y" || couponYN == "y")
+	{
+		std::string couponCode;
+		std::cout << "Please enter the coupon code: ";
+		std::getline(std::cin, couponCode);
+		//check if coupon is valid
+
+		if (couponCode == "10OFF")
+		{
+			double discount = total * 0.1;
+			total -= discount;
+			std::cout << "Coupon code applied. You received a discount of $" << discount << ".\n";
+		}
+		else
+		{
+			std::cout << "Invalid coupon code" << std::endl;
+			payment(menu, total, usernamePtr, cart);
+		}
+	}
+	else
+	{
+		std::cout << std::endl;
+		std::cout << "No coupon code was entered" << std::endl;
+		std::cout << std::endl;
+	}
+
 	std::cout << std::endl;
-	std::cout << "Order details : " << std::endl;
+	std::cout << "Total price : $" << total << std::endl;
+	std::cout << std::endl;
+
 	Line();
+	Line();
+	std::cout << "Payment" << std::endl;
+	std::cout << "..............................";
+	std::cout << std::endl;
+	//code a way to pay for the items in the cart
+	std::cout << "How would you like to pay?" << std::endl;
+	std::cout << "1. Credit Card" << std::endl;
+	std::cout << "2. Debit Card" << std::endl;
+	std::cout << "3. Put it on my tab" << std::endl;
+	int choiceB;
+	std::cin >> choiceB;
+
+	if (choiceB == 1)
+	{
+		std::string cardNumber;
+		//add card details
+		//card number
+
+		while (true)
+		{
+			std::cout << "Please enter your card number" << std::endl;
+			std::cin >> cardNumber;
+
+			//add a condition that says a cardnumber is 16 digits
+			if (cardNumber.length() != 16)
+			{
+				std::cout << std::endl;
+				std::cout << "Invalid card number. Please enter a 16-digit number " << std::endl;
+				std::cout << std::endl;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		while (true)
+		{
+			//card expiry date
+			std::cout << "Please enter your card expiry date (format: mm/yy)" << std::endl;
+			std::string cardExpiry;
+			std::cin >> cardExpiry;
+
+			//add condition so that the card expiry date is in the correct format
+			if (cardExpiry.length() != 5)
+			{
+				std::cout << std::endl;
+				std::cout << "Invalid card expiry date. Please enter a valid date in the format mm/yy   " << std::endl;
+				std::cout << std::endl;
+			}
+			else
+			{
+				break;
+			}
+
+		}
+		//card holder name
+		std::cout << "Please enter your card holder name" << std::endl;
+		std::string cardHolder;
+		std::getline(std::cin, cardHolder);
+
+		Line();
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
+		std::cout << std::endl;
+		std::cout << "Payment successful" << std::endl;
+		std::cout << std::endl;
+		Line();
+	}
+	else if (choiceB == 2)
+	{
+		std::string cardNumber;
+		//add card details
+		//card number
+
+		while (true)
+		{
+			std::cout << "Please enter your card number" << std::endl;
+			std::cin >> cardNumber;
+
+			//add a condition that says a cardnumber is 16 digits
+			if (cardNumber.length() != 16)
+			{
+				std::cout << std::endl;
+				std::cout << "Invalid card number. Please enter a 16-digit number " << std::endl;
+				std::cout << std::endl;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		while (true)
+		{
+			//card expiry date
+			std::cout << "Please enter your card expiry date (format: mm/yy)" << std::endl;
+			std::string cardExpiry;
+			std::cin >> cardExpiry;
+
+			//add condition so that the card expiry date is in the correct format
+			if (cardExpiry.length() != 5)
+			{
+				std::cout << std::endl;
+				std::cout << "Invalid card expiry date. Please enter a valid date in the format mm/yy   " << std::endl;
+				std::cout << std::endl;
+			}
+			else
+			{
+				break;
+			}
+
+		}
+		//card holder name
+		std::cout << "Please enter your card holder name" << std::endl;
+		std::string cardHolder;
+		std::getline(std::cin, cardHolder);
+
+		Line();
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
+		std::cout << std::endl;
+		std::cout << "Payment successful" << std::endl;
+		std::cout << std::endl;
+		Line();
+	}
+	else if (choiceB == 3)
+	{
+		//print cart
+
+		Line();
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
+		std::cout << std::endl;
+		Line();
+		std::cout << "Charge has been added to your account : " << std::endl;
+	}
+	else
+	{
+		std::cout << "Invalid choice" << std::endl;
+	}
+
 }
 
 void accountRecover(std::string* usernamePtr) //MJ
