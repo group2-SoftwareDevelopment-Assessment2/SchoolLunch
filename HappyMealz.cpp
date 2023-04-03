@@ -391,13 +391,21 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 			payment(menu, total, usernamePtr, cart);
 		}
 	}
-	else
+	else if (couponYN == "N" || couponYN == "n")
 	{
 		std::cout << std::endl;
 		std::cout << "No coupon code was entered" << std::endl;
 		std::cout << std::endl;
 	}
-
+	else
+	{
+	    Line();
+	    Line();
+		std::cout << "Invalid input. Please enter Y or N" << std::endl;
+		Line();
+		Line();
+		payment(menu, total, usernamePtr, cart);
+	}
 	std::cout << std::endl;
 	std::cout << "Total price : $" << total << std::endl;
 	std::cout << std::endl;
@@ -409,9 +417,8 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 	std::cout << std::endl;
 	//code a way to pay for the items in the cart
 	std::cout << "How would you like to pay?" << std::endl;
-	std::cout << "1. Credit Card" << std::endl;
-	std::cout << "2. Debit Card" << std::endl;
-	std::cout << "3. Put it on my tab" << std::endl;
+	std::cout << "1. Card" << std::endl;
+	std::cout << "2. Put it on my tab" << std::endl;
 	int choiceB;
 	std::cin >> choiceB;
 
@@ -438,14 +445,12 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 				break;
 			}
 		}
-
 		while (true)
 		{
 			//card expiry date
 			std::cout << "Please enter your card expiry date (format: mm/yy)" << std::endl;
 			std::string cardExpiry;
 			std::cin >> cardExpiry;
-
 			//add condition so that the card expiry date is in the correct format
 			if (cardExpiry.length() != 5)
 			{
@@ -474,65 +479,6 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 	}
 	else if (choiceB == 2)
 	{
-		std::string cardNumber;
-		//add card details
-		//card number
-
-		while (true)
-		{
-			std::cout << "Please enter your card number" << std::endl;
-			std::cin >> cardNumber;
-
-			//add a condition that says a cardnumber is 16 digits
-			if (cardNumber.length() != 16)
-			{
-				std::cout << std::endl;
-				std::cout << "Invalid card number. Please enter a 16-digit number " << std::endl;
-				std::cout << std::endl;
-			}
-			else
-			{
-				break;
-			}
-		}
-
-		while (true)
-		{
-			//card expiry date
-			std::cout << "Please enter your card expiry date (format: mm/yy)" << std::endl;
-			std::string cardExpiry;
-			std::cin >> cardExpiry;
-
-			//add condition so that the card expiry date is in the correct format
-			if (cardExpiry.length() != 5)
-			{
-				std::cout << std::endl;
-				std::cout << "Invalid card expiry date. Please enter a valid date in the format mm/yy   " << std::endl;
-				std::cout << std::endl;
-			}
-			else
-			{
-				break;
-			}
-
-		}
-		//card holder name
-		std::cout << "Please enter your card holder name" << std::endl;
-		std::string cardHolder;
-		std::getline(std::cin, cardHolder);
-
-		Line();
-		std::cout << std::endl;
-		printCart(menu, total, usernamePtr, cart);
-		std::cout << std::endl;
-		std::cout << "Payment successful" << std::endl;
-		std::cout << std::endl;
-		Line();
-	}
-	else if (choiceB == 3)
-	{
-		//print cart
-
 		Line();
 		std::cout << std::endl;
 		printCart(menu, total, usernamePtr, cart);
@@ -546,7 +492,6 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 	}
 
 }
-
 
 void accountRecover(std::string* usernamePtr) //MJ
 {
