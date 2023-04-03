@@ -754,7 +754,8 @@ void accountRecover(std::string* usernamePtr) //MJ
 						std::cin.get();
 						std::cin.get();
 						std::cout << std::endl;
-						loginForm(userLogin, usernamePtr);
+					        //back to userlogin loginGetYN()
+						loginGetYN(usernamePtr);
 					}
 					else if (confirm == 'n' || confirm == 'N')
 					{
@@ -1380,6 +1381,7 @@ bool loginGetYN(std::string* usernamePtr) //MJ
 	}
 	else
 	{
+		std::cout << std::endl;
 		std::cout << "Please only enter 'y' or 'n' " << std::endl;
 		loginGetYN(usernamePtr);
 
