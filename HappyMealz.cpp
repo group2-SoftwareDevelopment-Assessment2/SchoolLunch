@@ -47,7 +47,7 @@ std::vector<MenuItem> cart; // Richard // to create and empty cart vector
 
 bool ordering = true; //Richard
 
-void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr);
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart);
 
 void printCart(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //Richard
 {
@@ -127,22 +127,19 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
-void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr)
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart)
 {
-	vector<MenuItem> cart;
 	while (true) {
-		// ...
-		
-		//MJ: I'm adding the menu for the user to the ordering function
-	        cout << endl;
+		cout << endl;
 		printMenu(menu);
 		cout << endl;
-		
+
 		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit, or enter 20 to check out and continue ordering:" << endl;
 		int choice;
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
-			// ...
+			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
+			addToCart(cart, menu[choice - 1]);
 		}
 		else if (choice == 0) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
@@ -346,7 +343,7 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 			std::cout << std::endl;
 			Line();
 			//continue shopping
-			Ordering(menu, total, usernamePtr);
+			Ordering(menu, total, usernamePtr, cart);
 		}
 		else if (choice == 2)
 		{
@@ -465,54 +462,13 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 		std::string cardHolder;
 		std::getline(std::cin, cardHolder);
 
-
-		//create a file to store data
-		std::ofstream file("orderData.txt", ios::app);
-		//test if file is open
-		if (!file)
-		{
-			std::cout<<"Error: cannot open file";
-			return;
-		}
-		//write to file
-		file << "Payment total : $" << total - total << std::endl;
-		//write cart data to file
-		for (int i = 0; i < cart.size(); i++)
-		{
-			file << cart[i] << std::endl;
-		}
-
-		//close file
-		file.close();
-
 		Line();
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
 		std::cout << std::endl;
 		std::cout << "Payment successful" << std::endl;
 		std::cout << std::endl;
 		Line();
-
-		//ask user if they'd like to exit out of program or go back to start of program
-		std::cout << "Would you like to exit the program or go back to the start?" << std::endl;
-		std::cout << "1. Exit" << std::endl;
-		std::cout << "2. Go back to start" << std::endl;
-		int choiceC;
-		std::cin >> choiceC;
-
-		if (choiceC == 1)
-		{
-			//exit program
-			exit(0);
-		}
-		else if (choiceC == 2)
-		{
-			//go back to start of program
-			loginGetYN(usernamePtr);
-		}
-		else
-		{
-			std::cout << "Invalid choice" << std::endl;
-			payment(menu, total, usernamePtr, cart);
-		}
 	}
 	else if (choiceB == 2)
 	{
@@ -563,105 +519,24 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 		std::string cardHolder;
 		std::getline(std::cin, cardHolder);
 
-
-		//create a file to store data
-		std::ofstream file("orderData.txt", ios::app);
-		//test if file is open
-		if (!file)
-		{
-			std::cout << "Error: cannot open file";
-			return;
-		}
-		//write to file
-		file << "Payment total : $" << total - total << std::endl;
-		file << "Cart items : " << std::endl;
-		for (int i = 0; i < cart.size(); i++)
-		{
-			file << cart[i] << std::endl;
-		}
-
-		//close file
-		file.close();
-
 		Line();
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
 		std::cout << std::endl;
 		std::cout << "Payment successful" << std::endl;
 		std::cout << std::endl;
 		Line();
-
-		//ask user if they'd like to exit out of program or go back to start of program
-		std::cout << "Would you like to exit the program or go back to the start?" << std::endl;
-		std::cout << "1. Exit" << std::endl;
-		std::cout << "2. Go back to start" << std::endl;
-		int choiceC;
-		std::cin >> choiceC;
-
-		if (choiceC == 1)
-		{
-			//exit program
-			exit(0);
-		}
-		else if (choiceC == 2)
-		{
-			//go back to start of program
-			loginGetYN(usernamePtr);
-		}
-		else
-		{
-			std::cout << "Invalid choice" << std::endl;
-			payment(menu, total, usernamePtr, cart);
-		}
 	}
 	else if (choiceB == 3)
 	{
+		//print cart
 
-		//create a file to store data
-		std::ofstream file("orderData.txt", ios::app);
-		//test if file is open
-		if (!file)
-		{
-			std::cout << "Error: cannot open file";
-			return;
-		}
-		//write to file
-		file << "Payment total : $" << total << std::endl;
-		file << "Cart items : " << std::endl;
-		for (int i = 0; i < cart.size(); i++)
-		{
-			file << cart[i] << std::endl;
-		}
-
-		//close file
-		file.close();
-		
 		Line();
-        std::cout << std::endl;
-		std::cout << "Charge has been added to your account : " << std::endl;
+		std::cout << std::endl;
+		printCart(menu, total, usernamePtr, cart);
 		std::cout << std::endl;
 		Line();
-
-		//ask user if they'd like to exit out of program or go back to start of program
-		std::cout << "Would you like to exit the program or go back to the start?" << std::endl;
-		std::cout << "1. Exit" << std::endl;
-		std::cout << "2. Go back to start" << std::endl;
-		int choiceC;
-		std::cin >> choiceC;
-
-		if (choiceC == 1)
-		{
-			//exit program
-			exit(0);
-		}
-		else if (choiceC == 2)
-		{
-			//go back to start of program
-			loginGetYN(usernamePtr);
-		}
-		else
-		{
-			std::cout << "Invalid choice" << std::endl;
-			payment(menu, total, usernamePtr, cart);
-		}
+		std::cout << "Charge has been added to your account : " << std::endl;
 	}
 	else
 	{
@@ -669,6 +544,7 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 	}
 
 }
+
 
 void accountRecover(std::string* usernamePtr) //MJ
 {
