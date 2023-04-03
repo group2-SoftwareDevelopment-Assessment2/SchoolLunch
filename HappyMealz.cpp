@@ -129,35 +129,40 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
-void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart)
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr) // Richard
 {
+	vector<MenuItem> cart;
 	while (true) {
-		cout << endl;
-		printMenu(menu);
-		cout << endl;
-
-		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit, or enter 20 to check out and continue ordering:" << endl;
+		// ...
+		cout << "Press F1 to order items or Esc to check out and exit:" << endl;
 		int choice;
-		cin >> choice;
-		if (choice > 0 && choice <= menu.size()) {
-			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
-			addToCart(cart, menu[choice - 1], total);
+		choice = _getch();
+		if (choice == 0 || choice == 224) {
+			// If the function key is pressed, get the extended key code
+			choice = _getch();
 		}
-		else if (choice == 0) {
+		if (choice == 59) { // F1 key code is 59
+			cout << "Enter the unit number of the item you would like to order:" << endl;
+			int unit;
+			cin >> unit;
+			if (unit > 0 && unit <= menu.size()) {
+				// ...
+			}
+			else {
+				cout << "Invalid unit number" << endl;
+			}
+		}
+		else if (choice == 27) { // Escape key code is 27
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
 			payment(menu, total, usernamePtr, cart);
 			return;
-		}
-		else if (choice == 20) {
-			printCart(menu, total, usernamePtr, cart);
-			cart.clear();
 		}
 		else {
 			cout << "Invalid choice" << endl;
 		}
 	}
-
 }
+
 
 void removeFromCart(std::vector<MenuItem>& cart, int index)
 {
