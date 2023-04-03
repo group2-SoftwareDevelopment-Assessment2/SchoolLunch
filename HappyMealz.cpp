@@ -319,6 +319,8 @@ void loginForm(login& userLogin, std::string* usernamePtr) //MJ
 	} while (!userFound && attempt++ < 4);
 }
 
+void adminSaveOrder(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart);
+
 void payment(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //MJ
 {
 	//print the cart
@@ -476,6 +478,12 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 		std::cout << "Payment successful" << std::endl;
 		std::cout << std::endl;
 		Line();
+
+		//if payment is successful, it means total is equal to 0
+		total = 0;
+		//save order using function
+		adminSaveOrder(menu, total, usernamePtr, cart);
+		
 	}
 	else if (choiceB == 2)
 	{
@@ -485,6 +493,8 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 		std::cout << std::endl;
 		Line();
 		std::cout << "Charge has been added to your account : " << std::endl;
+		//save order
+		adminSaveOrder(menu, total, usernamePtr, cart);
 	}
 	else
 	{
@@ -492,6 +502,27 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 	}
 
 }
+
+//create a function to print the cart in file
+
+void adminSaveOrder(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart)
+{
+	std::ofstream outfile;
+	outfile.open("orders.txt", std::ios_base::app); //open the file in append mode
+
+	//write the username, total price, and cart items to the file
+	outfile << "Username: " << *usernamePtr << "\n";
+	outfile << "Total price: $" << total << "\n";
+	outfile << "Cart items:\n";
+
+	for (const auto& item : cart) {
+		outfile << item.unitNumber << " " << item.name << " $" << item.price << "\n";
+	}
+
+	outfile << "\n";
+	outfile.close();
+}
+
 
 void accountRecover(std::string* usernamePtr) //MJ
 {
