@@ -70,9 +70,11 @@ void printCart(const std::vector<MenuItem>& menu, double total, std::string* use
 	std::cout << std::endl;
 }
 
-void addToCart(std::vector<MenuItem>& cart, const MenuItem& item)
+void addToCart(std::vector<MenuItem>& cart, const MenuItem& item,  double& total)
 {
-	cart.push_back(item);                                              // Richard // this is to add the item to the end of the cart vector
+	 //adding total as an argument to the function so the data may pass through from ordering to payment
+	cart.push_back(item);  
+	total += item.price;                                             // Richard // this is to add the item to the end of the cart vector
 	std::cout << item.name << " added to cart." << std::endl;
 }
 
@@ -139,7 +141,7 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
 			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
-			addToCart(cart, menu[choice - 1]);
+			addToCart(cart, menu[choice - 1], total);
 		}
 		else if (choice == 0) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
