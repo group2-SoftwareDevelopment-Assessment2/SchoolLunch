@@ -129,7 +129,7 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
-void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart)
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //Richard
 {
 	while (true) {
 		cout << endl;
@@ -1078,63 +1078,124 @@ void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 
 //create a way for the admin to view all orders
 
-void adminViewOrders() //MJ might be our last function
+void adminViewOrders(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)
 {
-	// open the file orderData.txt
-	std::ifstream file("orderData.txt");
+	//View order?
+
+		// open the file orders.txt 
+	std::ifstream file("orders.txt");
 	if (!file)
+	{
+		std::cout << "No orders at this time" << std::endl;
+		return;
+	}
+
+	ifstream database_file("database.txt");
+	if (!database_file)
 	{
 		std::cout << "Error: Unable to open file." << std::endl;
 		return;
 	}
-	// read and display the name of the user and the order saved with usernamePtr
-	std::string line;
-	int lineNumber = 1;
-	std::cout << "All orders in the database:" << std::endl;
-	while (std::getline(file, line))
-	{
-		std::cout << lineNumber << ". " << line << std::endl;
-		lineNumber++;
-	}
-	// give the user the option to view the order details or exit to startmenu
+
+		// give the user the option to view the order details or exit to startmenu
 	std::cout << "Would you like to view the order details? (Y/N)" << std::endl;
 	char choice;
 	std::cin >> choice;
 	if (choice == 'Y' || choice == 'y')
 	{
-		// read and display the order details
+		//Yes, view order details
+
+		std::cout << std::endl;
+		std::cout << "Orders in the database:" << std::endl;
+		std::cout << std::endl;
+		Line();
+		Line();
+		std::cout << std::endl;
+
+		//print the order details
 		std::string line;
-		int lineNumber = 1;
-		std::cout << "All order details in the database:" << std::endl;
 		while (std::getline(file, line))
 		{
-			std::cout << lineNumber << ". " << line << std::endl;
-			lineNumber++;
+			std::cout << line << std::endl;
 		}
 
-		// Ask the user if they want to "process" the order
+		//would you like to process the order?
+
 		std::cout << "Would you like to process this order? (Y/N)" << std::endl;
-		char choice;
-		std::cin >> choice;
-		if (choice == 'Y' || choice == 'y')
+		char choiceE;
+		std::cin >> choiceE;
+
+		if (choiceE == 'Y' || choiceE == 'y')
 		{
-			// process the order
+			//Yess, process order details
+			Line();
+			Line();
+			std::cout << std::endl;
+			std::cout << "Press 1 to continue and 2 to exit to start menu" << std::endl; //Give user chance to back out
+			std::cout << std::endl;
+			std::cout << "1. Continue";
+			std::cout << "\n2. Exit to Start Menu" << std::endl;
+
+			int choiceD;
+			std::cin >> choiceD;
+			if (choiceD == 1)
+			{
+
+				file.close();
+				//delet file
+				std::remove("orders.txt");
+
+				std::cout << "Press Enter to continue to Start Menu" << std::endl;
+				std::cin.get();
+				std::cin.get();
+				adminStartMenu(control, menu, newItem);
+			}
+			else if (choiceD == 2)
+			{
+				//exit to startmenu
+				std::cout << "Press Enter to continue to Start Menu" << std::endl;
+				std::cin.get();
+				std::cin.get();
+				adminStartMenu(control, menu, newItem);
+			}
+			else
+			{
+				std::cout << "Invalid input. Please enter 1 or 2." << std::endl;
+				return;
+			}
 		}
-		else if (choice == 'N' || choice == 'n')
+		else if (choiceE == 'N' || choiceE == 'n')
 		{
 			// exit to startmenu
 			std::cout << "Press Enter to continue to Start Menu" << std::endl;
 			std::cin.get();
 			std::cin.get();
-			//adminStartMenu(control, menu, newItem);
+			adminStartMenu(control, menu, newItem);
 		}
 		else
 		{
 			std::cout << "Invalid input. Please enter Y or N." << std::endl;
 			return;
 		}
+		}
+		else if (choice == 'N' || choice == 'n')
+		{
+			//No, don't view order details
+			//back to startmenu
+				// exit to startmenu
+			std::cout << "Press Enter to continue to Start Menu" << std::endl;
+			std::cin.get();
+			std::cin.get();
+			adminStartMenu(control, menu, newItem);
+		}
+		else
+		{
+			//for viewing of order details
+			std::cout << "Error. Please only select Y or N" << std::endl;
+			return;
+		}
 	}
-}
+
 
 int main()
 {
@@ -1273,6 +1334,7 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	else if (choice == 3)
 	{
 		//view orders
+		adminViewOrders(control, menu, newItem);
 	}
 	else if (choice == 4)
 	{
