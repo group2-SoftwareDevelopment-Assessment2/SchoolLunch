@@ -1,0 +1,44 @@
+Username: Rich
+Total price: $26
+Cart items:
+1 . Vegan mac n cheese $6
+2 . Chicken and mayo wrap $7.5
+3 . Mince and cheese toasty $5.5
+4 . Sushi roll $7
+
+Username: Rich
+Total price: $44
+Cart items:
+1 . Vegan mac n cheese $6
+5 . Fruit Cup $4.5
+7 . Bag of veggie chips $3
+8 . Vegetarian paella $8
+9 . Chicken Salad and roll $6
+
+Username: Rich
+Total price: $22.5
+Cart items:
+1 . Vegan mac n cheese $6
+5 . Fruit Cup $4.5
+7 . Bag of veggie chips $3
+8 . Vegetarian paella $8
+9 . Chicken Salad and roll $6
+
+Username: Rich
+Total price: $0
+Cart items:
+1 . Vegan mac n cheese $6
+5 . Fruit Cup $4.5
+7 . Bag of veggie chips $3
+8 . Vegetarian paella $8
+9 . Chicken Salad and roll $6
+
+Username: Rich
+Total price: $16.5
+Cart items:
+1 . Vegan mac n cheese $6
+5 . Fruit Cup $4.5
+7 . Bag of veggie chips $3
+8 . Vegetarian paella $8
+9 . Chicken Salad and roll $6
+

@@ -62,7 +62,7 @@ void printCart(const std::vector<MenuItem>& menu, double total, std::string* use
 		total += item.price;
 	}
 
-	std::cout << std::endl;
+	std::cout << std::endl;                                    // Richard
 	std::cout << "----------------------------" << std::endl;
 	std::cout << "Total price : $" << total << std::endl;
 	std::cout << "----------------------------" << std::endl;
@@ -159,12 +159,14 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 
 }
 
-void removeFromCart(std::vector<MenuItem>& cart, int index)
+void removeFromCart(std::vector<MenuItem>& cart, int index)              //Richard // This function removes an item from the cart at the specified line number
 {
+	                                                                    // Richard // If the index is invalid, output an error message and return without modifying the cart
 	if (index < 0 || index >= cart.size()) {
 		std::cout << "Invalid index" << std::endl;
 		return;
 	}
+	                                                                  // Richard // Output a message indicating the name of the item that was removed from the cart
 	std::cout << cart[index].name << " removed from cart." << std::endl;
 	cart.erase(cart.begin() + index);
 }
