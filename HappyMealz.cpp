@@ -30,7 +30,7 @@ struct MenuItem //Richard
 	}
 };
 
-MenuItem newItem("1 Cheeseburger 2.99", 2.99);
+MenuItem newItem("11. Cheeseburger 2.99", 2.99);
 
 bool loginGetYN(std::string* usernamePtr); //MJ
 
@@ -982,6 +982,17 @@ std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& new
 			}
 		}
 
+		//assign a new unit number to the new item
+		int maxUnitNumber = 0;
+		for (const auto& item : menu)
+		{
+			if (item.unitNumber > maxUnitNumber)
+			{
+				maxUnitNumber = item.unitNumber;
+			}
+		}
+		newItem.unitNumber = maxUnitNumber + 1;
+
 		newItem.name = newName;
 		newItem.price = newPrice;
 		//add the new item to the menu
@@ -1021,7 +1032,7 @@ std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& new
 			return menu;
 		}
 		//remove the item from the menu
-		menu.erase(menu.begin() + choice - 1);
+		menu.erase(menu.begin() + index - 1);
 		std::cout << "Item was removed successfully." << std::endl;
 		std::cout << std::endl;
 		//print updated menu
