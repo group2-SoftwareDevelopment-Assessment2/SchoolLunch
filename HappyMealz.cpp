@@ -7,7 +7,6 @@
 #include<stdlib.h>                      
 #include<sstream>
 #include <limits>
-#include <conio.h>
 using namespace std;
 
 void Line() //MJ                         
