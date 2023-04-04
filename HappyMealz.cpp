@@ -136,7 +136,7 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 		printMenu(menu);
 		cout << endl;
 
-		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit, or enter 20 to check out and continue ordering:" << endl;
+		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit:" << endl;
 		int choice;
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
@@ -148,10 +148,7 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 			payment(menu, total, usernamePtr, cart);
 			return;
 		}
-		else if (choice == 20) {
-			printCart(menu, total, usernamePtr, cart);
-			cart.clear();
-		}
+		
 		else {
 			cout << "Invalid choice" << endl;
 		}
