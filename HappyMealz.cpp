@@ -4,10 +4,10 @@
 #include <vector>
 #include<istream>
 #include<fstream>
-#include<stdlib.h>                                                                                      
+#include<stdlib.h>                      
 #include<sstream>
 #include <limits>
-#include <iomanip>
+#include <conio.h>
 using namespace std;
 
 void Line() //MJ                         
@@ -22,7 +22,7 @@ struct MenuItem //Richard
 	double price;
 
 	//elements in menuItems vector are initialized with only one string argument, so this is how we can initialize it
-	MenuItem(const std::string& itemString, double itemPrice) 
+	MenuItem(const std::string& itemString, double itemPrice)
 	{
 		std::istringstream iss(itemString);
 		iss >> unitNumber;
@@ -54,7 +54,7 @@ void printCart(const std::vector<MenuItem>& menu, double total, std::string* use
 	total = 0; // Richard // this is to initialize the total price to 0
 
 	std::cout << std::endl;
-	std::cout << "Cart for:"<<*usernamePtr << std::endl;   // Richard // used to display the cart header
+	std::cout << "Cart for:" << *usernamePtr << std::endl;   // Richard // used to display the cart header
 	std::cout << "----------------------------" << std::endl;
 
 	for (const auto& item : cart)
@@ -70,11 +70,12 @@ void printCart(const std::vector<MenuItem>& menu, double total, std::string* use
 	std::cout << std::endl;
 }
 
-void addToCart(std::vector<MenuItem>& cart, const MenuItem& item,  double& total)
-{
-	 //adding total as an argument to the function so the data may pass through from ordering to payment
+void addToCart(std::vector<MenuItem>& cart, const MenuItem& item, double& total)
+{ //adding total as an argument to the function so the data may pass through from ordering to payment
 	cart.push_back(item);  
-	total += item.price;                                             // Richard // this is to add the item to the end of the cart vector
+	total += item.price;
+
+	// Richard // this is to add the item to the end of the cart vector
 	std::cout << item.name << " added to cart." << std::endl;
 }
 
@@ -92,7 +93,7 @@ void printMenu(const std::vector<MenuItem>& menu) //Richard
 
 std::vector<MenuItem> menuItems()  //Richard
 {
-	std::vector<MenuItem> menu = 
+	std::vector<MenuItem> menu =
 	{
 		{"1. Vegan mac n cheese", 6.00},
 		{"2. Chicken and mayo wrap", 7.50},
@@ -129,40 +130,35 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
-void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr) // Richard
+void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart)
 {
-	vector<MenuItem> cart;
 	while (true) {
-		// ...
-		cout << "Press F1 to order items or Esc to check out and exit:" << endl;
+		cout << endl;
+		printMenu(menu);
+		cout << endl;
+
+		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit, or enter 20 to check out and continue ordering:" << endl;
 		int choice;
-		choice = _getch();
-		if (choice == 0 || choice == 224) {
-			// If the function key is pressed, get the extended key code
-			choice = _getch();
+		cin >> choice;
+		if (choice > 0 && choice <= menu.size()) {
+			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
+			addToCart(cart, menu[choice - 1], total);
 		}
-		if (choice == 59) { // F1 key code is 59
-			cout << "Enter the unit number of the item you would like to order:" << endl;
-			int unit;
-			cin >> unit;
-			if (unit > 0 && unit <= menu.size()) {
-				// ...
-			}
-			else {
-				cout << "Invalid unit number" << endl;
-			}
-		}
-		else if (choice == 27) { // Escape key code is 27
+		else if (choice == 0) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
 			payment(menu, total, usernamePtr, cart);
 			return;
+		}
+		else if (choice == 20) {
+			printCart(menu, total, usernamePtr, cart);
+			cart.clear();
 		}
 		else {
 			cout << "Invalid choice" << endl;
 		}
 	}
-}
 
+}
 
 void removeFromCart(std::vector<MenuItem>& cart, int index)
 {
@@ -240,7 +236,7 @@ void loginForm(login& userLogin, std::string* usernamePtr) //MJ
 						std::cout << std::endl;
 						std::cout << "This will be the Menu for today" << std::endl;
 						Line();
-						Ordering(menuItems(), total, usernamePtr);
+						Ordering(menuItems(), total, usernamePtr, cart);
 
 						break;
 					}
@@ -528,7 +524,6 @@ void adminSaveOrder(const std::vector<MenuItem>& menu, double total, std::string
 	outfile.close();
 }
 
-
 void accountRecover(std::string* usernamePtr) //MJ
 {
 	login userLogin; //to help define the parameters of other used funtions
@@ -601,6 +596,9 @@ void accountRecover(std::string* usernamePtr) //MJ
 				{
 					std::cout << std::endl;
 					char confirm;
+					//read as a string input
+
+
 					std::cout << "Is this you?\n";
 					std::cout << "y/n : ";
 					std::cin >> confirm;
@@ -613,8 +611,9 @@ void accountRecover(std::string* usernamePtr) //MJ
 						std::cin.get();
 						std::cin.get();
 						std::cout << std::endl;
-					        //back to userlogin loginGetYN()
+						//back to login page
 						loginGetYN(usernamePtr);
+						
 					}
 					else if (confirm == 'n' || confirm == 'N')
 					{
@@ -899,10 +898,8 @@ std::vector<MenuItem> modifyMenu(std::vector<MenuItem> menu, MenuItem& newItem) 
 	double newPrice;
 
 	std::cout << "Enter the new name of the item" << std::endl;
-	std::cout <<"Pro Tip : Add the number of the item to the name to make it easier to find" << std::endl;
 	std::cin.ignore();
 	std::getline(std::cin, newName);
-
 
 	//the user can only input a int value and no $ signs, ect...
 	while (true)
@@ -953,99 +950,99 @@ std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& new
 
 	//aks admin if they'd like to add or remove an item
 	std::cout << "Would you like to add or remove an item?" << std::endl;
-		std::cout << "1. Add" << std::endl;
-		std::cout << "2. Remove" << std::endl;
-		int choice;
-		std::cin >> choice;
+	std::cout << "1. Add" << std::endl;
+	std::cout << "2. Remove" << std::endl;
+	int choice;
+	std::cin >> choice;
 
-		//if the admin wants to add an item
-		if (choice == 1)
-		{    //this part is close to the code from the modifymenu vector I created above
-			//get the name and price of the new item
-			std::string newName;
-			double newPrice;
-			std::cout << "Enter the name of the item" << std::endl;
-			std::cin.ignore();
-			std::getline(std::cin, newName);
-			//the user can only input a int value and no $ signs, ect...
-			while (true)
+	//if the admin wants to add an item
+	if (choice == 1)
+	{    //this part is close to the code from the modifymenu vector I created above
+		//get the name and price of the new item
+		std::string newName;
+		double newPrice;
+		std::cout << "Enter the name of the item" << std::endl;
+		std::cin.ignore();
+		std::getline(std::cin, newName);
+		//the user can only input a int value and no $ signs, ect...
+		while (true)
+		{
+			std::cout << "Enter the price of the item" << std::endl;
+			std::cin >> newPrice;
+			//this is for incase the admin a $ sign for a double value
+
+			if (std::cin.fail())
 			{
-				std::cout << "Enter the price of the item" << std::endl;
-				std::cin >> newPrice;
-				//this is for incase the admin a $ sign for a double value
-
-				if (std::cin.fail())
-				{
-					std::cout << "Invalid input. Please enter a number.\n";
-					std::cin.clear(); //clear the error flag
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //this should irnore the invalid input
-				}
-				else
-				{
-					break; //if the input is valid then break out of the loop
-				}
+				std::cout << "Invalid input. Please enter a number.\n";
+				std::cin.clear(); //clear the error flag
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //this should irnore the invalid input
 			}
-
-			newItem.name = newName;
-			newItem.price = newPrice;
-			//add the new item to the menu
-			menu.push_back(newItem);
-			std::cout << "Item was added successfully." << std::endl;
-			std::cout << std::endl;
-			//print updated menu
-			Line();
-			printMenu(menu);
-			Line();
-			std::cout << "Press Enter to continue to Start Menu" << std::endl;
-			std::cin.get();
-			std::cin.get();
-			adminStartMenu(control, menu, newItem);
+			else
+			{
+				break; //if the input is valid then break out of the loop
+			}
 		}
 
-		//if the admin wants to remove an item
+		newItem.name = newName;
+		newItem.price = newPrice;
+		//add the new item to the menu
+		menu.push_back(newItem);
+		std::cout << "Item was added successfully." << std::endl;
+		std::cout << std::endl;
+		//print updated menu
+		Line();
+		printMenu(menu);
+		Line();
+		std::cout << "Press Enter to continue to Start Menu" << std::endl;
+		std::cin.get();
+		std::cin.get();
+		adminStartMenu(control, menu, newItem);
+	}
 
-		else if (choice == 2)
-		{
-			//print the menu so the admin can see
-			Line();
-			std::cout << "This is you current menu" << std::endl;
-			Line();
-			std::cout << std::endl;
-			printMenu(menu);
-			std::cout << std::endl;
-			Line();
-			//ask the admin which item they'd like to remove
-			std::cout << "Enter the number of the item you would like to remove" << std::endl;
-			int index;
-			std::cin >> index;
-			//check if the index is in the range of the menu items
-			if (index <1 || index > menu.size())
-			{
-				std::cout << "Invalid choice. Please choose a number between 1 and " << menu.size() << std::endl;
-				return menu;
-			}
-			//remove the item from the menu
-			menu.erase(menu.begin() + choice - 1);
-			std::cout << "Item was removed successfully." << std::endl;
-			std::cout << std::endl;
-			//print updated menu
-			Line();
-			printMenu(menu);
-			Line();
-			std::cout << "Press Enter to continue to Start Menu" << std::endl;
-			std::cin.get();
-			std::cin.get();
-			adminStartMenu(control, menu, newItem);
-		}
+	//if the admin wants to remove an item
 
-		//don't forget about invalid choices
-		else
+	else if (choice == 2)
+	{
+		//print the menu so the admin can see
+		Line();
+		std::cout << "This is you current menu" << std::endl;
+		Line();
+		std::cout << std::endl;
+		printMenu(menu);
+		std::cout << std::endl;
+		Line();
+		//ask the admin which item they'd like to remove
+		std::cout << "Enter the number of the item you would like to remove" << std::endl;
+		int index;
+		std::cin >> index;
+		//check if the index is in the range of the menu items
+		if (index <1 || index > menu.size())
 		{
-			std::cout<<"Error. Please only select 1 or 2"<<std::endl;
+			std::cout << "Invalid choice. Please choose a number between 1 and " << menu.size() << std::endl;
 			return menu;
 		}
+		//remove the item from the menu
+		menu.erase(menu.begin() + choice - 1);
+		std::cout << "Item was removed successfully." << std::endl;
+		std::cout << std::endl;
+		//print updated menu
+		Line();
+		printMenu(menu);
+		Line();
+		std::cout << "Press Enter to continue to Start Menu" << std::endl;
+		std::cin.get();
+		std::cin.get();
+		adminStartMenu(control, menu, newItem);
+	}
 
+	//don't forget about invalid choices
+	else
+	{
+		std::cout << "Error. Please only select 1 or 2" << std::endl;
 		return menu;
+	}
+
+	return menu;
 }
 
 //create a way for the admin to view all users
@@ -1077,8 +1074,10 @@ void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	std::cout << "Press Enter to continue to Start Menu" << std::endl;
 	std::cin.get();
 	std::cin.get();
-	adminStartMenu(control,menu,newItem);
+	adminStartMenu(control, menu, newItem);
 }
+
+//create a way for the admin to view all orders
 
 void adminViewOrders() //MJ might be our last function
 {
@@ -1138,7 +1137,7 @@ void adminViewOrders() //MJ might be our last function
 	}
 }
 
-int main() 
+int main()
 {
 	adminLogin admin; //creating an instance of the adminLogin class
 	controlLogin control; //adding the structure for the admin
@@ -1255,9 +1254,9 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	std::cout << "This is your start menu :" << std::endl;
 	std::cout << std::endl;
 	std::cout << "1. Modify an item in the menu" << std::endl;
-	std::cout << "2. Remove or add an item from the menu" << std::endl; 
-	std::cout << "3. View the orders" << std::endl; 
-	std::cout << "4. View the users" << std::endl; 
+	std::cout << "2. Remove or add an item from the menu" << std::endl;
+	std::cout << "3. View the orders" << std::endl;
+	std::cout << "4. View the users" << std::endl;
 	std::cout << "5. Log out" << std::endl;
 	//have admin choose
 	int choice;
@@ -1269,7 +1268,7 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	}
 	else if (choice == 2)
 	{
-        // Call addOrExtractMenu
+		// Call addOrExtractMenu
 		menu = addOrExtractMenu(menu, newItem);
 	}
 	else if (choice == 3)
