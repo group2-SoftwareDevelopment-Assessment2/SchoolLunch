@@ -129,6 +129,7 @@ void newAccount(login& userLogin);   //MJ
 
 void accountRecover(std::string* usernamePtr); //MJ
 
+void removeFromCart(std::vector<MenuItem>& cart, int index);
 void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //Richard
 {
 	while (true) {
@@ -136,19 +137,25 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 		printMenu(menu);
 		cout << endl;
 
-		cout << "Enter the unit number of the item you would like to order, or enter 0 to check out and exit:" << endl;
+		cout << "Enter the unit number of the item you would like to order, or enter -1 to remove an item, or enter 0 to check out and exit:" << endl;
 		int choice;
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
-			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
 			addToCart(cart, menu[choice - 1], total);
 		}
+		else if (choice == -1) {
+			cout << "Enter the index of the item you would like to remove:" << endl;
+			int index;
+			cin >> index;
+			removeFromCart(cart, index - 1);
+			total -= cart[index - 1].price;
+			cart.erase(cart.begin() + index - 1);
+		}
 		else if (choice == 0) {
-			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			payment(menu, total, usernamePtr, cart);
 			return;
 		}
-		
 		else {
 			cout << "Invalid choice" << endl;
 		}
@@ -156,17 +163,16 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 
 }
 
-void removeFromCart(std::vector<MenuItem>& cart, int index)              //Richard // This function removes an item from the cart at the specified line number
+void removeFromCart(std::vector<MenuItem>& cart, int index)              //Richard
 {
-	                                                                    // Richard // If the index is invalid, output an error message and return without modifying the cart
 	if (index < 0 || index >= cart.size()) {
 		std::cout << "Invalid index" << std::endl;
 		return;
 	}
-	                                                                  // Richard // Output a message indicating the name of the item that was removed from the cart
 	std::cout << cart[index].name << " removed from cart." << std::endl;
 	cart.erase(cart.begin() + index);
 }
+
 
 void loginForm(login& userLogin, std::string* usernamePtr) //MJ 
 {
