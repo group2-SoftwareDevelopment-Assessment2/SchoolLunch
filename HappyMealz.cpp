@@ -1,3 +1,7 @@
+                                                       //MJ Van der Westhuizen
+							//Working with Richard Hill
+							//Team 2
+							//CS103 Assessment 2. Application Option 5
 #include<iostream>
 #include<string>
 #include<string.h>
@@ -62,7 +66,7 @@ void printCart(const std::vector<MenuItem>& menu, double total, std::string* use
 		total += item.price;
 	}
 
-	std::cout << std::endl;                                    // Richard
+	std::cout << std::endl;    //Richard
 	std::cout << "----------------------------" << std::endl;
 	std::cout << "Total price : $" << total << std::endl;
 	std::cout << "----------------------------" << std::endl;
@@ -130,6 +134,7 @@ void newAccount(login& userLogin);   //MJ
 void accountRecover(std::string* usernamePtr); //MJ
 
 void removeFromCart(std::vector<MenuItem>& cart, int index);
+
 void Ordering(const std::vector<MenuItem>& menu, double total, std::string* usernamePtr, std::vector<MenuItem>& cart) //Richard
 {
 	while (true) {
@@ -141,6 +146,7 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 		int choice;
 		cin >> choice;
 		if (choice > 0 && choice <= menu.size()) {
+			// Separating this out from the main ordering loop helps keep the code organized and easier to maintain.
 			addToCart(cart, menu[choice - 1], total);
 		}
 		else if (choice == -1) {
@@ -152,7 +158,7 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 			cart.erase(cart.begin() + index - 1);
 		}
 		else if (choice == 0) {
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear input buffer
 			payment(menu, total, usernamePtr, cart);
 			return;
 		}
@@ -163,16 +169,18 @@ void Ordering(const std::vector<MenuItem>& menu, double total, std::string* user
 
 }
 
-void removeFromCart(std::vector<MenuItem>& cart, int index)              //Richard
+void removeFromCart(std::vector<MenuItem>& cart, int index)
 {
+	//Richard // 
 	if (index < 0 || index >= cart.size()) {
+		
 		std::cout << "Invalid index" << std::endl;
 		return;
-	}
+	}// Richard // Output a message indicating the name of the item that was removed from the cart
+
 	std::cout << cart[index].name << " removed from cart." << std::endl;
 	cart.erase(cart.begin() + index);
 }
-
 
 void loginForm(login& userLogin, std::string* usernamePtr) //MJ 
 {
@@ -488,7 +496,7 @@ void payment(const std::vector<MenuItem>& menu, double total, std::string* usern
 		total = 0;
 		//save order using function
 		adminSaveOrder(menu, total, usernamePtr, cart);
-		
+		//ask if they want to continue shopping
 	}
 	else if (choiceB == 2)
 	{
@@ -1060,6 +1068,128 @@ std::vector<MenuItem> addOrExtractMenu(std::vector<MenuItem> menu, MenuItem& new
 	return menu;
 }
 
+//creating a way for the admin to edit users
+void adminEditUser(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem)
+{
+	login userToUpdate; //creating an instance of the adminLogin class
+	bool accountFound = false; //creating a bool to check if the account is found
+
+	//open database.txt for reading and writing
+	std::fstream file("database.txt");
+	if (!file)
+	{
+		std::cout << "Error: Unable to open file." << std::endl;
+		return;
+	}
+
+	while (true)
+	{
+	//ask the admin which user they'd like to edit
+	std::cout << "Which user would you like to edit?" << std::endl;
+	std::string username;
+	std::cin.ignore();
+	std::getline(cin, username);
+	  
+	//display acc info
+	std::cout << std::endl;
+	std::cout << "Account Information inculde : \n\n";
+	std::string line;
+
+	while (getline(file, line))
+	{
+		if (line == username) //if the username is eqaul to the username in the database, info will display
+		{
+			std::cout << "Username :" << " " << line;
+			std::cout << std::endl;
+			std::getline(file, line); //read email
+			std::cout << "Email :" << " " << line;
+			std::cout << std::endl;
+			std::getline(file, line); // read password
+			std::getline(file, line); // read allergies
+			string allergies = line;
+			std::cout << "Allergies :" << " " << line;
+			std::cout << std::endl;
+			getline(file, line); // read special diets
+			string diets = line;
+			std::cout << "Diet requirements :" << " " << line;
+			std::cout << std::endl;
+			accountFound = true; //if the account is found, the bool will be true
+
+			if (accountFound == true)
+			{
+				//allow changes to account
+				std::cout<< std::endl;
+				//Prompt the admin for the new user information
+				std::cout << "Enter the new username" << std::endl;
+				std::getline(std::cin, userToUpdate.username);
+				std::cout << "Enter the new email" << std::endl;
+				//check if the email is valid
+				while (true) //adding a condition that forces user to use the @ symbol in email input field
+				{
+
+					std::getline(std::cin, userToUpdate.email);
+
+					if (userToUpdate.email.find('@') != std::string::npos)
+					{
+						break;
+					}
+					else
+					{
+						std::cout << "Invalid email address. Please include '@' symbol." << std::endl;
+					}
+				} //end of while loop
+
+				std::cout << "Enter the new password" << std::endl;
+				std::getline(std::cin, userToUpdate.password);
+				std::cout << "Enter the new allergy" << std::endl;
+				std::getline(std::cin, userToUpdate.allergy);
+				std::cout << "Enter the new diet" << std::endl;
+				std::getline(std::cin, userToUpdate.diet);
+
+				//write the new user information to the database in thew same way as we save users in the newAccount funtion
+				file.seekp(0); //move the file pointer to the beginning of the file
+				
+					file << userToUpdate.username << "\n";
+					file << userToUpdate.email << "\n";
+					file << userToUpdate.password << "\n";
+					file << userToUpdate.allergy << "\n";
+					file << userToUpdate.diet << "\n";
+				
+
+				//close the file
+				file.close();
+
+				//let admin know the user was updated
+				std::cout << "User was updated successfully." << std::endl;
+
+				//pause the program
+				Line();
+				std::cout << std::endl;
+				std::cout << "Press Enter to continue to Start Menu" << std::endl;
+				Line();
+				std::cout << std::endl;
+				std::cin.get();
+				std::cin.get();
+				adminStartMenu(control, menu, newItem);
+			}
+			else
+			{
+			std:cout << "Sorry, account not found.\n" << std::endl;
+					//pause the program
+				file.close();
+				std::cout << "Press Enter to continue to Start Menu" << std::endl;
+				std::cin.get();
+					std::cin.get();
+					adminStartMenu(control, menu, newItem);
+			}
+		}//end of if staements that validates the username
+
+
+	}//end of second while loop
+	} //end of first while loop
+
+}
+
 //create a way for the admin to view all users
 
 void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem& newItem) //MJ
@@ -1072,24 +1202,64 @@ void adminViewUsers(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 		return;
 	}
 
-	// Read and display each line in the file
+	// Display the logins
+	std::cout << std::endl;
+	std::cout << "All users in the databse : \n" << std::endl;
+
+	// Read and display each line in the file as the login structure
+	std::vector<login> logins;
 	std::string line;
-	int lineNumber = 1;
-	std::cout << "All users in the database:" << std::endl;
 	while (std::getline(file, line))
 	{
-		std::cout << lineNumber << ". " << line << std::endl;
-		lineNumber++;
+		login l;
+		l.username = line;
+		std::cout << "Username: " << l.username << std::endl;
+		std::getline(file, line);
+		l.email = line;
+		std::cout << "Email: " << l.email << std::endl;
+		std::getline(file, line);
+		l.password = line;
+		std::cout << "Password: " << l.password << std::endl;
+		std::getline(file, line);
+		l.allergy = line;
+		std::cout << "Allergy: " << l.allergy << std::endl;
+		std::getline(file, line);
+		l.diet = line;
+		std::cout << "Diet: " << l.diet << std::endl;
+		logins.push_back(l);
+		std::cout << std::endl;
 	}
 
 	// Close the file
 	file.close();
 
-	// Pause the program
-	std::cout << "Press Enter to continue to Start Menu" << std::endl;
+	//have the user choose between exiting or editing a user
+	Line();
+	std::cout << std::endl;
+	std::cout << "Would you like to edit a user? (y/n)" << std::endl;
+	char choice;
+	std::cin >> choice;
+	if (choice == 'y' || choice == 'Y')
+	{
+		//call the edit user function
+		std::cout << std::endl;
+		Line();
+		Line();
+		adminEditUser(control, menu, newItem);
+	}
+	else if(choice == 'n'||choice == 'N')
+	{
+		std::cout << std::endl;
+		std::cout << std::endl;
+			std::cout << "Press Enter to continue to Start Menu" << std::endl;
 	std::cin.get();
 	std::cin.get();
 	adminStartMenu(control, menu, newItem);
+	}
+	else
+	{
+
+	}
 }
 
 //create a way for the admin to view all orders
@@ -1332,7 +1502,7 @@ void adminStartMenu(controlLogin& control, std::vector<MenuItem>& menu, MenuItem
 	std::cout << "1. Modify an item in the menu" << std::endl;
 	std::cout << "2. Remove or add an item from the menu" << std::endl;
 	std::cout << "3. View the orders" << std::endl;
-	std::cout << "4. View the users" << std::endl;
+	std::cout << "4. View and edit the user accounts" << std::endl;
 	std::cout << "5. Log out" << std::endl;
 	//have admin choose
 	int choice;
